@@ -1,0 +1,27 @@
+#开发环境
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: yhyc2018
+    url: jdbc:mysql://localhost/oarysj?characterEncoding=utf-8&useSSL=false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    #文件上传大小配置
+  http:
+    multipart:
+      max-file-size: 10MB
+  freemarker:
+    settings:
+      number_format: 0.##
+
+upload:
+  path: D:\rysj\upload
+server:
+  tomcat:
+    min-spare-threads: 50
+    max-threads: 500
+  connection-timeout: 5000
+

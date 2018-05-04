@@ -1,0 +1,26 @@
+#线上环境
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: oarysj
+    password: yhyc2018
+    url: jdbc:mysql://localhost/oarysj?characterEncoding=utf-8&useSSL=false
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    #文件上传大小配置
+  http:
+    multipart:
+      max-file-size: 10MB
+  freemarker:
+    settings:
+      number_format: 0.##
+
+server:
+  port: 80
+  address: sell.aisanye.com
+
+
+upload:
+  path: /www/wwwroot/yhyc
