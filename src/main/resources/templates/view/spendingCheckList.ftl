@@ -98,21 +98,21 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>月份</th>
-                                    <th>申请人</th>
-                                    <th>申请时间</th>
-                                    <th>标题</th>
-                                    <th>内容</th>
-                                    <th>金额</th>
-                                    <th>审核流程结果</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>月份</th>
+                                        <th>申请人</th>
+                                        <th>申请时间</th>
+                                        <th>标题</th>
+                                        <th>内容</th>
+                                        <th>金额</th>
+                                        <th>审核流程结果</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                 <#list pageContent.getPageContent() as p>
                                 <tr id="${p.getSpendingInfo().getId()}">
                                     <td>${p.getSpendingInfo().getMonth()}</td>
@@ -155,8 +155,11 @@
                                     </td>
                                 </tr>
                                 </#list>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
                             <div class="margin-top-30 text-align-right">
                                 <div class="next">
                                     <ul class="pagination">
@@ -226,9 +229,15 @@
                             resultStatus: resultStatus
                         },
                         function (res) {
-                            layer.msg(res.message, {
-                                time: 1000
-                            });
+                            if (res.code==0){
+                                layer.msg(res.message+"----"+res.data.message, {
+                                    time: 1000
+                                });
+                            }else {
+                                layer.msg(res.message, {
+                                    time: 1000
+                                });
+                            }
                             var url =  window.location.pathname;
                             var search = window.location.search;
                             if (res.code==0){

@@ -118,4 +118,31 @@ public class MOMOAnchorSalary {
      * 税后
      */
     private BigDecimal afterTax;
+    /**
+     * 职业返点
+     */
+    private BigDecimal fanDian;
+    /**
+     * 节奏代刷
+     */
+    private BigDecimal daiShua;
+    /**
+     * 借款
+     */
+    private BigDecimal jieKuan;
+    /**
+     * 最后工资
+     */
+    private BigDecimal salary;
+
+    /**
+     * 系统提现
+     */
+    private BigDecimal systemTX = new BigDecimal(0);
+    /**
+     * 可提金额
+     */
+    private BigDecimal mentionable;
+
+    private String remark;
 }

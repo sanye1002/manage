@@ -16,4 +16,6 @@ public interface PersonnelSalaryRepository extends JpaRepository<PersonnelSalary
     Page<PersonnelSalary> findAllByMonth(Pageable pageable,String month);
 
     PersonnelSalary findByPhoneAndMonth(String phone,String month);
+
+    Page<PersonnelSalary> findAllByPersonnelId(Pageable pageable,Integer id);
 }

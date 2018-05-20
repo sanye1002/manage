@@ -71,7 +71,7 @@
                         <div class="mail-body">
                             <ul class="mail-list">
                                 <#list pageContent.getContent() as check>
-                                     <li class="list-item <#if check.getSalary() gte 500>unread</#if>">
+                                     <li class="list-item <#if check.getSalary()! gte 500>unread</#if>">
                                          <div class="item-sender">
                                              <a href="/oa/check/index/${check.getId()}.html" class="col-name">${check.getApplyPersonnelName()!}</a>
                                          </div>

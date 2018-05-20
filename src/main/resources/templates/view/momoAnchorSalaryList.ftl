@@ -100,38 +100,45 @@
                                         <th>风控扣款(元)</th>
                                         <th>结算金额(元)</th>
                                         <th>实际收入(元)</th>
-                                        <th>税前</th>
-                                        <th>税后</th>
+                                        <th>税前收益</th>
+                                        <th>税后收益</th>
+                                        <th>职业返点</th>
+                                        <th>节奏代刷</th>
+                                        <th>借款</th>
+                                        <th>最终工资</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                         <#list pageContent.getContent() as mm>
                                         <tr id="${mm.getId()}">
-                                            <td>${mm.getMonth()}</td>
-                                            <td>${mm.getName()}</td>
-                                            <td>${mm.getLiveId()}</td>
-                                            <td>${mm.getGrade()}</td>
-                                            <td>${mm.getId()}</td>
+                                            <td>${mm.getMonth()!}</td>
+                                            <td>${mm.getName()!}</td>
+                                            <td>${mm.getLiveId()!}</td>
+                                            <td>${mm.getGrade()!}</td>
+                                            <td>${mm.getId()!}</td>
                                             <td>${mm.getBrokerName()!}</td>
                                             <td>${mm.getBrokerId()!}</td>
-                                            <td>${mm.getLianMaiMoBi()}</td>
-                                            <td>${mm.getAllMoBi()}</td>
-                                            <td>${mm.getBillingMethod()}</td>
-                                            <td>${mm.getBoZhuFenChen()}</td>
-                                            <td>${mm.getGongHuiFenChen()}</td>
-                                            <td>${mm.getBoZhuJiangLi()}</td>
-                                            <td>${mm.getQiTaJiangLi()}</td>
-                                            <td>${mm.getRuHuiQian()}</td>
-                                            <td>${mm.getGeSui()}</td>
-                                            <td>${mm.getTiXian()}</td>
-                                            <td>${mm.getFengKongKouKuan()}</td>
-                                            <td>${mm.getBillingSalary()}</td>
-                                            <td>${mm.getRealSalary()}</td>
-                                            <td>${mm.getBeforeTax()}</td>
-                                            <td>${mm.getAfterTax()}</td>
+                                            <td>${mm.getLianMaiMoBi()!}</td>
+                                            <td>${mm.getAllMoBi()!}</td>
+                                            <td>${mm.getBillingMethod()!}</td>
+                                            <td>${mm.getBoZhuFenChen()!}</td>
+                                            <td>${mm.getGongHuiFenChen()!}</td>
+                                            <td>${mm.getBoZhuJiangLi()!}</td>
+                                            <td>${mm.getQiTaJiangLi()!}</td>
+                                            <td>${mm.getRuHuiQian()!}</td>
+                                            <td>${mm.getGeSui()!}</td>
+                                            <td>${mm.getTiXian()!}</td>
+                                            <td>${mm.getFengKongKouKuan()!}</td>
+                                            <td>${mm.getBillingSalary()!}</td>
+                                            <td>${mm.getRealSalary()!}</td>
+                                            <td>${mm.getBeforeTax()!}</td>
+                                            <td>${mm.getAfterTax()!}</td>
+                                            <td>${mm.getFanDian()!}</td>
+                                            <td>${mm.getDaiShua()!}</td>
+                                            <td>${mm.getJieKuan()!}</td>
+                                            <td>${mm.getSalary()!}</td>
                                             <td>操作</td>
-
                                         </tr>
                                         </#list>
 

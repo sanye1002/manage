@@ -8,6 +8,7 @@ import com.sanye.manage.utils.MobileExactUtil;
 import com.sanye.manage.utils.ResultVOUtil;
 import com.sanye.manage.utils.ShiroGetSession;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -159,6 +160,20 @@ public class UserController {
         return ResultVOUtil.success(map);
 
     }
+    @PostMapping("/congruent")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> congruent(@RequestParam(value = "id") Integer id) {
+        UserInfo userInfo = userService.findOne(id);
+        if (userInfo.getCongruentImgs()==null){
+
+            return ResultVOUtil.error(100,"合同无图片！");
+        }
+        return ResultVOUtil.success();
+
+    }
+
+
+
 
 
 }

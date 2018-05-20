@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: popo
@@ -101,6 +102,8 @@ public interface SpendingService {
      * @return
      */
     List<SpendingInfo> findAllByMonth(String month);
+
+    Map<String,Object> revoke(Integer id);
 
 
 }

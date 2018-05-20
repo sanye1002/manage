@@ -60,9 +60,9 @@
                             </div>
                             <div class="widget-body">
                                 <div id="registration-form">
-                                    <form role="form">
+
                                         <div class="form-title">基本信息</div>
-                                        <div class="col-sm-12">
+                                        <#--<div class="col-sm-12">
                                             <div class="form-group">
                                                 <label>工号ID</label>
                                                 <span class="input-icon icon-right">
@@ -70,9 +70,15 @@
                                                     <i class="fa fa-user"></i>
                                                 </span>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <div class="col-sm-6">
-
+                                            <div class="form-group">
+                                                <label>工号ID</label>
+                                                <span class="input-icon icon-right">
+                                                    <input type="text" disabled value="系统分配" class="form-control">
+                                                    <i class="fa fa-user"></i>
+                                                </span>
+                                            </div>
                                             <div class="form-group">
                                                 <label for="name">姓名（不可修改）</label>
                                                 <span class="input-icon icon-right">
@@ -143,6 +149,13 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
+                                                <label for="joinTime">入职时间</label>
+                                                <span class="input-icon icon-right">
+                                                    <input type="text" value="${personnelInfo.getJoinTime()!}" id="joinTime" class="form-control">
+                                                   <i class="fa fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="password">密码（用于登录）</label>
                                                 <span class="input-icon icon-right">
                                                     <input id="password" type="password" class="form-control"
@@ -151,7 +164,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </form>
+
                                     <div class="clear_float"></div>
                                 <#--暂时不用上传身份证 要使用去掉最大的div-->
 
@@ -230,7 +243,17 @@
 </div>
 
 <#include "../common/footjs.ftl">
+<script src="/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
 
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#joinTime'
+        });
+    });
+</script>
 <script type="text/javascript">
 
     var personnel = {
@@ -243,6 +266,7 @@
         status: "",
         roleId: "",
         deptNo: "",
+        joinTime:"",
         idCardPositive:"",//正面
         idCardSide:"" ,//身份证反面
         idCardHold:"" //身份证手持照
@@ -293,6 +317,7 @@
         personnel.status = $("#status").val();
         personnel.roleId = $("#role").val();
         personnel.deptNo = $("#dept").val();
+        personnel.joinTime = $("#joinTime").val();
         personnel.idCardPositive=$("#image-upload-box-one").attr("src");
         personnel.idCardSide=$("#image-upload-box-two").attr("src");
         personnel.idCardHold=$("#image-upload-box-three").attr("src");
@@ -316,7 +341,12 @@
             layer.msg("手机号码已经重复！", {
                 time: 1000
             });
+        } else if (personnel.joinTime ==""){
+            layer.msg("请选择入职时间！", {
+                time: 1000
+            });
         } else {
+
             $.post(
                     "/oa/personnel/save",
                     {
@@ -325,6 +355,7 @@
                         phone: personnel.phone,
                         sex: personnel.sex,
                         age: personnel.age,
+                        joinTime: personnel.joinTime,
                         password: personnel.password,
                         status: personnel.status,
                         roleId: personnel.roleId,
@@ -339,7 +370,7 @@
                         });
                         if (res.code == 0) {
                             setTimeout(function () {
-                                location = "/oa/personnel/index.html";
+                                location = "/oa/personnel/list.html";
                             }, 1000);
                         }
                     }

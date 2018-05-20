@@ -78,6 +78,14 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label for="level"
+                                                   class="col-sm-2 control-label no-padding-right">等级：</label>
+                                            <div class="col-sm-10">
+                                                <input type="number" name="level" value="${roleDTO.getLevel()!}" id="level"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="col-sm-2 control-label no-padding-right">权限：</label>
                                             <div class="col-sm-10">
                                                 <#if  roleDTO.getId()==0>
@@ -155,6 +163,7 @@
         $("#roleSubmit").click(function () {
             var id = "${roleDTO.getId()!}";
             var name = $("#name").val();
+            var level = $("#level").val();
             var description = $("#description").val();
             var idList = $("input[name='level']:checked").map(function () {
                 return $(this).val();
@@ -171,6 +180,10 @@
                 layer.msg("描述不能为空", {
                     time: 1000
                 });
+            }else if(level==""){
+                layer.msg("级别必须输入", {
+                    time: 1000
+                });
             }else {
                 $.ajax({
                     type: 'POST',
@@ -180,6 +193,7 @@
                     data: JSON.stringify({
                         id: id,
                         name: name,
+                        level: level,
                         description: description,
                         idList: idList
                     }),
@@ -194,7 +208,7 @@
                                 time: 1000
                             });
                             setTimeout(function () {
-                                location = "/oa/role/index.html";
+                                location = "/oa/role/list.html";
                             }, 1000);
                         }
                     },

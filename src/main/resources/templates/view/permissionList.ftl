@@ -65,17 +65,18 @@
                                 </div>
                             </div>
 
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>#ID</th>
-                                    <th>权限名称</th>
-                                    <th>权限方法</th>
-                                    <th>权限描述</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#ID</th>
+                                        <th>权限名称</th>
+                                        <th>权限方法</th>
+                                        <th>权限描述</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                     <#list pageContent.getContent() as permission>
                                     <tr id="${permission.getId()}"
                                        <#if permission.id%2!=0>class="success"</#if>
@@ -94,8 +95,9 @@
                                         </td>
                                     </tr>
                                     </#list>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                            <#include "../common/page.ftl">
                         </div>
                     </div>

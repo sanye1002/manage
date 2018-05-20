@@ -73,7 +73,7 @@
                             <div class="step-pane " id="tabbedwizardstep2">${pageTitle}</div>
                             <div class="step-pane " id="tabbedwizardstep3">
                                 <p>标题:${checkInfo.getTitle()}</p></br>
-                                <p>金额:${checkInfo.getSalary()}</p></br>
+                                <p>金额:${checkInfo.getSalary()!}</p></br>
                                 <p>内容: ${checkInfo.getDescription()}</p></br>
                                 <p>申请时间:${checkInfo.getApplyTime()!}</p></br>
                                 <p><a class="btn btn-info btn-xs"

@@ -77,20 +77,34 @@
                                         <th>播主等级</th>
                                         <th>总陌币</th>
                                         <th>结算方式</th>
-                                        <th>当月工资</th>
+                                        <th>税前收益</th>
+                                        <th>税后收益</th>
+                                        <th>职业返点</th>
+                                        <th>节奏代刷</th>
+                                        <th>借款</th>
+                                        <th>最终工资</th>
+                                        <th>已提现</th>
+                                        <th>剩余可提</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                         <#list pageContent.getContent() as mm>
                                         <tr id="${mm.getId()}">
-                                            <td>${mm.getMonth()}</td>
-                                            <td>${mm.getName()}</td>
-                                            <td>${mm.getLiveId()}</td>
-                                            <td>${mm.getGrade()}</td>
-                                            <td>${mm.getAllMoBi()}</td>
-                                            <td>${mm.getBillingMethod()}</td>
-                                            <td>${mm.getAfterTax()}</td>
+                                            <td>${mm.getMonth()!}</td>
+                                            <td>${mm.getName()!}</td>
+                                            <td>${mm.getLiveId()!}</td>
+                                            <td>${mm.getGrade()!}</td>
+                                            <td>${mm.getAllMoBi()!}</td>
+                                            <td>${mm.getBillingMethod()!}</td>
+                                            <td>${mm.getBeforeTax()!}</td>
+                                            <td>${mm.getAfterTax()!}</td>
+                                            <td>${mm.getFanDian()!}</td>
+                                            <td>${mm.getDaiShua()!}</td>
+                                            <td>${mm.getJieKuan()!}</td>
+                                            <td>${mm.getSalary()!}</td>
+                                            <td>${mm.getSystemTX()!}</td>
+                                            <td>${mm.getMentionable()!}</td>
                                             <td>
                                                 <a id="tiXian" onclick="tiXian('${userInfo.getPassword()}',${mm.getId()})" class="btn btn-sky btn-sm  btn-follow">
                                                     <i class="fa fa-arrow-circle-o-right"></i>

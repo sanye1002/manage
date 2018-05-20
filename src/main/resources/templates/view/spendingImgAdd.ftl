@@ -85,8 +85,8 @@
                             </div>
                             <div class="form-group ">
                                 <div class="text-right" style="margin-right:16px;">
-                                    <a class="btn btn-success" id="delete" href="javascript:void(0);"><i
-                                            class="btn-label glyphicon glyphicon-ok"></i> 取消</a>
+                                    <a class="btn btn-danger" id="delete" ><i
+                                            class="btn-label glyphicon glyphicon-remove"></i> 取消</a>
                                     <a class="btn btn-success" id="submit" href="javascript:void(0);"><i
                                             class="btn-label glyphicon glyphicon-ok"></i> 提交</a>
                                 </div>
@@ -108,7 +108,34 @@
     var id =  ${spendingInfo.getId()};
     $(function () {
         $("#delete").click(function () {
+            layer.confirm('重置图片上传？', {
+                        btn: ['确认', '取消'] //按钮
+                    }, function () {
 
+                        layer.msg('请稍等...', {
+                            time: 1000
+                        });
+                        //执行POST请求
+                        $.post(
+                                "/oa/spending/remove/img",
+                                {
+                                    id: id
+                                },
+                                function (res) {
+                                    layer.msg(res.message, {
+                                        time: 1000
+                                    });
+                                    var url =  window.location.pathname;
+                                    var search = window.location.search;
+                                    if (res.code==0){
+                                        setTimeout(function () {
+                                            location=url+search
+                                        },1000)
+                                    }
+                                }
+                        )
+                    }
+            )
         })
         $("#submit").click(function () {
             if (flog) {

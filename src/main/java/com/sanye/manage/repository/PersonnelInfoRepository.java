@@ -26,6 +26,8 @@ public interface PersonnelInfoRepository extends JpaRepository<PersonnelInfo,Int
 
     List<PersonnelInfo> findByDeptNo(String deptNo);
 
+    List<PersonnelInfo> findAllByStatusAndShowStatusAndDeptNo(Integer status,Integer showStatus,String deptNo);
+
     List<PersonnelInfo> findAllByPhone(String phone);
 
     PersonnelInfo findByUserId(Integer id);

@@ -7,6 +7,8 @@ import com.sanye.manage.service.RolePermissionService;
 import com.sanye.manage.service.UserService;
 import com.sanye.manage.utils.Encrypt;
 import com.sanye.manage.utils.GetTimeUtil;
+import com.sanye.manage.utils.SendMessageUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +30,7 @@ import java.util.stream.Collectors;
  */
 @Controller
 @RequestMapping("/")
+@Slf4j
 public class PageTestController {
     @Autowired
     private RolePermissionService rolePermissionService;
@@ -41,6 +45,9 @@ public class PageTestController {
     public ModelAndView show(Map<String, Object> map) {
         map.put("pageId", 3);
         map.put("pageTitle", "审核列表");
+        //
+        // SendMessageUtil.sendSalaryTypeMessage("18145032533","三爷","工资预支","已拨款");
+        // SendMessageUtil.sendNoticeMessage("18145032533","popo","平台线上短信通知不用回复");
         return new ModelAndView("view/test", map);
     }
 

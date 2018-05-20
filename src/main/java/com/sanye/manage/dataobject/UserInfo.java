@@ -70,4 +70,8 @@ public class UserInfo {
     private String bankUserName;//开户姓名
 
     private String AliPay;//支付宝
+
+    private String joinTime;//入职时间
+
+    private String congruentImgs;//合同照片
 }

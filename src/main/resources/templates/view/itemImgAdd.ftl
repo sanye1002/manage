@@ -85,7 +85,7 @@
                             </div>
                             <div class="form-group ">
                                 <div class="text-right" style="margin-right:16px;">
-                                    <a class="btn btn-danger" id="delete" href="javascript:void(0);"><i
+                                    <a class="btn btn-danger" id="delete" ><i
                                             class="btn-label glyphicon glyphicon-remove"></i> 取消</a>
                                     <a class="btn btn-success" id="submit" href="javascript:void(0);"><i
                                             class="btn-label glyphicon glyphicon-ok"></i> 提交</a>

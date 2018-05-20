@@ -62,19 +62,20 @@
                                 <div class="widget-header bordered-bottom bordered-palegreen">
                                     <span class="widget-caption">预支记录</span>
                                 </div>
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>物品</th>
-                                        <th>申请时间</th>
-                                        <th>借记数量</th>
-                                        <th>你的备注</th>
-                                        <th>审核状态</th>
-                                        <th>审核结果</th>
-                                        <th>批注</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
+                                <div class="table-scrollable">
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>物品</th>
+                                            <th>申请时间</th>
+                                            <th>借记数量</th>
+                                            <th>你的备注</th>
+                                            <th>审核状态</th>
+                                            <th>审核结果</th>
+                                            <th>批注</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
                                    <#list pageContent.getContent() as page>
                                    <tr id="${page.getId()}" <#if page.getResultStatus()==1>class="success" </#if>>
                                        <td>${page.getItemName()}</td>
@@ -102,8 +103,9 @@
                                        <td>${page.getResultRemark()!}</td>
                                    </tr>
                                    </#list>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <#include "../common/page.ftl">
                             </div>
                         </div>

@@ -68,7 +68,8 @@ public class UploadUtil {
             dir.mkdirs();
         }
         //上传文件名
-        String fileName = KeyUtil.genUniqueKey() + file.getOriginalFilename();
+        //String fileName = KeyUtil.genUniqueKey() + file.getOriginalFilename();
+        String fileName = KeyUtil.genUniqueKey() + ".jpg";
         //保存文件
         File saveFile = new File(path + File.separator + fileName);
 
@@ -154,6 +155,10 @@ public class UploadUtil {
             BigDecimal realSalary = POIUtil.getBigDecimal(row.getCell(20));
             BigDecimal beforeTax = POIUtil.getBigDecimal(row.getCell(21));
             BigDecimal afterTax = POIUtil.getBigDecimal(row.getCell(22));
+            BigDecimal fanDian = POIUtil.getBigDecimal(row.getCell(23));
+            BigDecimal daiShua = POIUtil.getBigDecimal(row.getCell(24));
+            BigDecimal jieKuan = POIUtil.getBigDecimal(row.getCell(25));
+            BigDecimal salary = POIUtil.getBigDecimal(row.getCell(26));
 
 
             //添加数据
@@ -182,6 +187,11 @@ public class UploadUtil {
             momoAnchorSalary.setRealSalary(realSalary);
             momoAnchorSalary.setBeforeTax(beforeTax);
             momoAnchorSalary.setAfterTax(afterTax);
+            momoAnchorSalary.setFanDian(fanDian);
+            momoAnchorSalary.setDaiShua(daiShua);
+            momoAnchorSalary.setJieKuan(jieKuan);
+            momoAnchorSalary.setSalary(salary);
+            momoAnchorSalary.setMentionable(salary);
 
             arrayList.add(momoAnchorSalary);
 

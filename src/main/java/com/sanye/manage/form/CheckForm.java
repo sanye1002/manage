@@ -42,7 +42,7 @@ public class CheckForm {
 
     private String title;
 
-    private BigDecimal salary;
+    private BigDecimal salary=new BigDecimal(0.00);
 
     private String description;
 

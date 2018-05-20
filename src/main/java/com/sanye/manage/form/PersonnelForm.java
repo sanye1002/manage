@@ -39,6 +39,8 @@ public class PersonnelForm {
      */
     private Integer showStatus =1;
 
+    private String joinTime;
+
     private String idCardPositive; //身份证正面
 
     private String idCardSide; //身份证反面

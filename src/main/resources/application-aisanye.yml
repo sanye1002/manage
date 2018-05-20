@@ -2,7 +2,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    username: oarysj
+    username: root
     password: yhyc2018
     url: jdbc:mysql://localhost/oarysj?characterEncoding=utf-8&useSSL=false
   jpa:
@@ -18,9 +18,13 @@ spring:
       number_format: 0.##
 
 server:
-  port: 80
-  address: sell.aisanye.com
+  tomcat:
+    min-spare-threads: 50
+    max-threads: 500
+  connection-timeout: 5000
+  port: 8888
+  #address: yhyc.cdrysj.com
 
 
 upload:
-  path: /www/wwwroot/yhyc
+  path: D:\rysj\upload

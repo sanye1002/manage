@@ -4,8 +4,10 @@ import com.sanye.manage.DTO.DeptDTO;
 import com.sanye.manage.DTO.PersonnelInfoDTO;
 import com.sanye.manage.dataobject.DeptInfo;
 import com.sanye.manage.dataobject.PersonnelInfo;
+import com.sanye.manage.dataobject.UserInfo;
 import com.sanye.manage.repository.DeptInfoRepository;
 import com.sanye.manage.repository.PersonnelInfoRepository;
+import com.sanye.manage.repository.UserInfoRepository;
 import com.sanye.manage.service.DeptService;
 import com.sanye.manage.service.PersonnelInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,8 @@ public class DeptServiceImpl implements DeptService {
     @Autowired
     private PersonnelInfoRepository personnelInfoRepository;
 
+    @Autowired
+    private UserInfoRepository userInfoRepository;
     @Override
     public DeptInfo save(DeptInfo deptInfo) {
         return deptInfoRepository.save(deptInfo);
@@ -117,4 +121,23 @@ public class DeptServiceImpl implements DeptService {
     public DeptInfo findOneByDeptNo(String deptNo) {
         return deptInfoRepository.findByDeptNo(deptNo);
     }
+
+    @Override
+    public List<UserInfo> findAllUserInfoByDeptId(Integer deptId) {
+        DeptInfo deptInfo = deptInfoRepository.findOne(deptId);
+        List<PersonnelInfo> personnelInfoList = personnelInfoRepository.findAllByStatusAndShowStatusAndDeptNo(1,1,deptInfo.getDeptNo());
+        List<UserInfo> userInfoList = new ArrayList<>();
+        if (!personnelInfoList.isEmpty()){
+            personnelInfoList.forEach(p->{
+                userInfoList.add(userInfoRepository.findOne(p.getUserId()));
+            });
+        }
+        return userInfoList;
+    }
+
+    @Override
+    public List<DeptInfo> findAll() {
+        return deptInfoRepository.findAll();
+    }
+
 }

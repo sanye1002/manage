@@ -1,6 +1,7 @@
 package com.sanye.manage.repository;
 
 import com.sanye.manage.dataobject.UserInfo;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +24,9 @@ public interface UserInfoRepository extends JpaRepository<UserInfo,Integer>{
     List<UserInfo> findAllByUserType(String userType);
 
     Page<UserInfo> findAllByUserTypeAndStatusAndShowStatus(Pageable pageable, String userType, Integer status, Integer showStatus);
-    
+
+    List<UserInfo> findAllByStatusAndShowStatusAndUserType(Integer Status,Integer showStatus,String userType);
+
+    List<UserInfo> findAllByStatusAndShowStatus(Integer Status,Integer showStatus);
 
 }

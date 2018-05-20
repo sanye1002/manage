@@ -85,21 +85,22 @@
                                     </div>
                                 </div>
                             </form>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
 
-                                    <th>头像</th>
-                                    <th>姓名</th>
-                                    <th>昵称</th>
-                                    <th>年龄</th>
-                                    <th>电话</th>
-                                    <th>性别</th>
-                                    <th>添加时间</th>
-                                    <th colspan="3">操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                                        <th>头像</th>
+                                        <th>姓名</th>
+                                        <th>昵称</th>
+                                        <th>年龄</th>
+                                        <th>电话</th>
+                                        <th>性别</th>
+                                        <th>添加时间</th>
+                                        <th colspan="4">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                 <#list pageContent.getContent() as items>
                                 <tr id="${items.id}" <#if items.id%2!=0>class="success"</#if> style="height: 50px;text-align: center">
 
@@ -124,11 +125,22 @@
                                     <td>
                                         <a class="btn btn-info btn-xs" onclick="showSFZ(${items.getId()})"><i class="fa fa-edit"></i> 身份证</a>
                                     </td>
+                                    <#if items.getCongruentImgs()! == "">
+                                        <td>
+                                            <a class="btn btn-info btn-xs" href="/oa/anchor/congruent/${items.getId()}.html"><i class="fa fa-edit"></i> 档案添加</a>
+                                        </td>
+                                    <#else>
+                                        <td>
+                                            <a class="btn btn-warning btn-xs" onclick="showHeTong(${items.getId()})"><i class="fa fa-edit"></i> 档案展示</a>
+                                        </td>
+                                    </#if>
 
                                 </tr>
                                 </#list>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <#include "../common/page.ftl">
                         </div>
                     </div>
@@ -179,6 +191,14 @@
 <script>
  function showSFZ(id) {
      $.getJSON('/layer/photos/'+id, function(json){
+         layer.photos({
+             photos: json
+             ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+         });
+     });
+ }
+ function showHeTong(id) {
+     $.getJSON('/layer/congruent/'+id, function(json){
          layer.photos({
              photos: json
              ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）

@@ -4,14 +4,8 @@ package com.sanye.manage.controller;
 
 import com.sanye.manage.VO.ResultVO;
 import com.sanye.manage.config.UploadConfig;
-import com.sanye.manage.dataobject.AnchorSalaryAdvance;
-import com.sanye.manage.dataobject.ItemInfo;
-import com.sanye.manage.dataobject.PersonnelSalaryAdvance;
-import com.sanye.manage.dataobject.SpendingInfo;
-import com.sanye.manage.service.AnchorSalaryAdvanceService;
-import com.sanye.manage.service.ItemInfoService;
-import com.sanye.manage.service.PersonnelSalaryAdvanceService;
-import com.sanye.manage.service.SpendingService;
+import com.sanye.manage.dataobject.*;
+import com.sanye.manage.service.*;
 import com.sanye.manage.utils.ResultVOUtil;
 import com.sanye.manage.utils.UploadUtil;
 import lombok.Synchronized;
@@ -53,6 +47,8 @@ public class UploadController {
     private AnchorSalaryAdvanceService anchorSalaryAdvanceService;
     @Autowired
     private ItemInfoService itemInfoService;
+    @Autowired
+    private UserService userService;
     @PostMapping("/img/{type}")
     private ResultVO<Map<String, String>> uploadFile(HttpServletRequest request,
                                                      @PathVariable String type,
@@ -134,6 +130,7 @@ public class UploadController {
                 return ResultVOUtil.error(100, "上传失败");
             }
         }
+
         if (type.equals("item")){
             log.info("id={}",id);
             ItemInfo itemInfo = itemInfoService.findOne(id);
@@ -147,6 +144,24 @@ public class UploadController {
                 map.put("src", src);
                 log.info("img={}",itemInfo.getImg());
                 itemInfoService.save(itemInfo);
+                return ResultVOUtil.success(map);
+            } else {
+                return ResultVOUtil.error(100, "上传失败");
+            }
+        }
+        if (type.equals("congruent")){
+            log.info("id={}",id);
+            UserInfo userInfo = userService.findOne(id);
+            String src = UploadUtil.uploadFile(file, path,type);
+            if (src != null) {
+                if (userInfo.getCongruentImgs()==null){
+                    userInfo.setCongruentImgs(src);
+                }else {
+                    userInfo.setCongruentImgs(userInfo.getCongruentImgs()+","+src);
+                }
+                map.put("src", src);
+                log.info("img={}",userInfo.getCongruentImgs());
+                userService.save(userInfo);
                 return ResultVOUtil.success(map);
             } else {
                 return ResultVOUtil.error(100, "上传失败");

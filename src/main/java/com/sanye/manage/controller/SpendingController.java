@@ -221,8 +221,26 @@ public class SpendingController {
         spendingInfo.setCheckTime(GetTimeUtil.getTime());
         spendingInfo.setCheckPersonnelId(personnelInfo.getId());
         spendingInfo.setCheckPersonnelName(personnelInfo.getName());
-        spendingService.save(spendingInfo);
-        return ResultVOUtil.success();
+        SpendingInfo resultSpending = spendingService.save(spendingInfo);
+        //发送短信
+        Map<String,Object> map = new HashMap<>();
+        UserInfo messageUser = userService.findOne(personnelInfoService.findById(resultSpending.getPersonnelId()).getUserId());
+        String phone = messageUser.getPhone();
+        String username = messageUser.getName();
+        String type = "日常开支";
+        String result;
+        if (resultStatus == 1) {
+            result = "通过,已拨款";
+        } else {
+            result = "失败";
+        }
+
+        if(SendMessageUtil.sendSalaryTypeMessage(phone, username, type, result)){
+            map.put("message","短信发送成功！");
+        }else {
+            map.put("message","短信发送失败！");
+        }
+        return ResultVOUtil.success(map);
     }
 
     @GetMapping("/download/{month}")
@@ -230,5 +248,21 @@ public class SpendingController {
                          @PathVariable(value = "month") String month) {
         List<SpendingInfo> spendingInfoList = spendingService.findAllByMonth(month);
     }
+    @PostMapping("/revoke")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> revoke(@RequestParam("id") Integer id){
+        return ResultVOUtil.success(spendingService.revoke(id));
+    }
+
+    @PostMapping("/remove/img")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> removeImg(@RequestParam("id") Integer id){
+        SpendingInfo spendingInfo = spendingService.findOne(id);
+        spendingInfo.setImg("");
+        spendingService.save(spendingInfo);
+        return ResultVOUtil.success();
+    }
+
+
 
 }

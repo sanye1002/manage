@@ -53,7 +53,9 @@ public class PersonnelInfoServiceImpl implements PersonnelInfoService {
         PersonnelInfo personnelInfo = personnelInfoRepository.findOne(id);
         UserInfo userInfo = userService.findOne(personnelInfo.getUserId());
         personnelInfo.setShowStatus(0);
+        personnelInfo.setStatus(0);
         userInfo.setShowStatus(0);
+        userInfo.setStatus(0);
         save(personnelInfo);
         userService.save(userInfo);
     }
@@ -121,7 +123,7 @@ public class PersonnelInfoServiceImpl implements PersonnelInfoService {
 
     @Override
     public List<PersonnelInfo> findAll() {
-        return personnelInfoRepository.findAll();
+        return personnelInfoRepository.findAllByShowStatus(1);
     }
 
     @Override

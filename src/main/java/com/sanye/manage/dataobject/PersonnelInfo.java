@@ -42,6 +42,8 @@ public class PersonnelInfo {
      */
     private String deptNo;
 
+    private String joinTime;//入职时间
+
     private String createDate; //创建时间
 
     private String updateDate; //修改时间

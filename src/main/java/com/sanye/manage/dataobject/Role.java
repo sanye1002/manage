@@ -26,6 +26,8 @@ public class Role {
      **/
     private String description;
 
+    private Integer level;
+
 
 
 

@@ -138,4 +138,23 @@ public class LayuiPhotos {
         }
         return ImgVOUtil.success(id,list);
     }
+    @GetMapping("/congruent/{id}")
+    @ResponseBody
+    public ImgVO<Map<String,String>> congruentImg(@PathVariable(value = "id")Integer id){
+        List<Map<String,Object>> list = new ArrayList<>();
+        UserInfo userInfo = userService.findOne(id);
+        String allSrc = userInfo.getCongruentImgs();
+
+        String[] srcList = KeyUtil.splitString(allSrc);
+        for (int i=0;i<srcList.length;i++){
+
+            Map<String,Object> map = new HashMap<>();
+            map.put("alt","合同信息"+i);
+            map.put("pid",i);
+            map.put("src",srcList[i]);
+            map.put("thumb",srcList[i]);
+            list.add(map);
+        }
+        return ImgVOUtil.success(id,list);
+    }
 }

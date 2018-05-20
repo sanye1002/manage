@@ -31,4 +31,5 @@ public interface FileInfoService {
      */
     FileInfo findByPlatformIdAndMonth(Integer id,String month);
 
+
 }

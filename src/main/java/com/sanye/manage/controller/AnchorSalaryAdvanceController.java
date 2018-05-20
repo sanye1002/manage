@@ -54,7 +54,6 @@ public class AnchorSalaryAdvanceController {
     private AnchorSalaryAdvanceService salaryAdvanceService;
 
     /**
-     *
      * @param map
      * @return
      */
@@ -62,19 +61,18 @@ public class AnchorSalaryAdvanceController {
     @RequiresPermissions("anchorSalaryAdvance:add")
     public ModelAndView index(Map<String, Object> map) {
         UserInfo userInfo = ShiroGetSession.getUserInfo();
-        List<AnchorInfo>  anchorInfoList= anchorService.findAllByUserId(userInfo.getId());
+        List<AnchorInfo> anchorInfoList = anchorService.findAllByUserId(userInfo.getId());
         map.put("userInfo", userInfo);
-        map.put("anchorList",anchorInfoList);
+        map.put("anchorList", anchorInfoList);
         map.put("pageId", 5);
         map.put("pageTitle", "主播工资预支申请");
-        if (!PayCheckUtil.check()){
+        if (!PayCheckUtil.check()) {
             return new ModelAndView("redirect:/oa/user/info.html");
         }
         return new ModelAndView("view/anchorSalaryAdvanceAdd", map);
     }
 
     /**
-     *
      * @param map
      * @param id
      * @return
@@ -91,7 +89,6 @@ public class AnchorSalaryAdvanceController {
     }
 
     /**
-     *
      * @param anchorSalaryAdvanceForm
      * @param bindingResult
      * @return
@@ -113,7 +110,6 @@ public class AnchorSalaryAdvanceController {
     }
 
     /**
-     *
      * @param id
      * @return
      */
@@ -144,7 +140,6 @@ public class AnchorSalaryAdvanceController {
     }
 
     /**
-     *
      * @param page
      * @param size
      * @param checkStatus
@@ -183,7 +178,6 @@ public class AnchorSalaryAdvanceController {
     }
 
     /**
-     *
      * @param id
      * @param resultStatus
      * @param remark
@@ -203,7 +197,7 @@ public class AnchorSalaryAdvanceController {
             if (c.getCheckStatus() == 0) {
                 return ResultVOUtil.error(100, "该工资预支还处于审核中！");
             }
-            if (resultStatus==1){
+            if (resultStatus == 1) {
                 if (c.getResultStatus() == 0) {
                     return ResultVOUtil.error(100, "该工资预支审核不通过！请撤销！");
                 }
@@ -217,21 +211,38 @@ public class AnchorSalaryAdvanceController {
         anchorSalaryAdvance.setCheckPersonnelId(anchorInfo.getId());
         anchorSalaryAdvance.setCheckPersonnelName(anchorInfo.getName());
         anchorSalaryAdvance.setBackStatus(0);
-        salaryAdvanceService.save(anchorSalaryAdvance);
-        return ResultVOUtil.success();
+        AnchorSalaryAdvance resultAdvance = salaryAdvanceService.save(anchorSalaryAdvance);
+        //发送短信
+        Map<String,Object> map = new HashMap<>();
+        UserInfo messageUser = userService.findOne(resultAdvance.getUserId());
+        String phone = messageUser.getPhone();
+        String username = messageUser.getName();
+        String type = "工资预支";
+        String result;
+        if (resultStatus == 1) {
+            result = "审核通过,已拨款";
+        } else {
+            result = "审核失败";
+        }
+
+        if(SendMessageUtil.sendSalaryTypeMessage(phone, username, type, result)){
+            map.put("message","短信发送成功！");
+        }else {
+            map.put("message","短信发送失败！");
+        }
+        return ResultVOUtil.success(map);
     }
 
     /**
-     *
      * @param id
      * @return
      */
     @PostMapping("/back")
     @ResponseBody
-    public ResultVO<Map<String, Object>> back(@RequestParam("id") Integer id){
+    public ResultVO<Map<String, Object>> back(@RequestParam("id") Integer id) {
         AnchorSalaryAdvance anchorSalaryAdvance = salaryAdvanceService.findOne(id);
         if (anchorSalaryAdvance == null) {
-            return ResultVOUtil.error(100, "该工资预支不可拨款！");
+            return ResultVOUtil.error(100, "该工资预支不可归还！");
         }
         anchorSalaryAdvance.setBackStatus(1);
         anchorSalaryAdvance.setBackTime(GetTimeUtil.getTime());
@@ -240,7 +251,6 @@ public class AnchorSalaryAdvanceController {
     }
 
     /**
-     *
      * @param map
      * @param page
      * @param size
@@ -261,6 +271,21 @@ public class AnchorSalaryAdvanceController {
         map.put("size", size);
         map.put("currentPage", page);
         return new ModelAndView("view/anchorSalaryAdvanceListByUser", map);
+    }
+
+    @PostMapping("/revoke")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> revoke(@RequestParam("id") Integer id){
+        return ResultVOUtil.success(salaryAdvanceService.revoke(id));
+    }
+
+    @PostMapping("/remove/img")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> removeImg(@RequestParam("id") Integer id){
+        AnchorSalaryAdvance anchorSalaryAdvance = salaryAdvanceService.findOne(id);
+        anchorSalaryAdvance.setImg("");
+        salaryAdvanceService.save(anchorSalaryAdvance);
+        return ResultVOUtil.success();
     }
 
 }

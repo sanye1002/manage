@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: popo
@@ -26,4 +27,6 @@ public interface AnchorSalaryAdvanceService {
     List<AnchorSalaryAdvance> findAllByMonthAndResultStatus(String month,Integer resultStatus);
 
     PageDTO<AnchorSalaryAdvanceDTO> findAllByMonthAndCheckStatusAndResultStatus(Pageable pageable, String month, Integer checkStatus, Integer resultStatus);
+
+    Map<String,Object> revoke(Integer id);
 }

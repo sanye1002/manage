@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -107,6 +109,22 @@ public class SpendingServiceImpl implements SpendingService {
     @Override
     public List<SpendingInfo> findAllByMonth(String month) {
         return repository.findAllByMonth(month);
+    }
+
+    @Override
+    public Map<String, Object> revoke(Integer id) {
+        Integer count = checkInfoRepository.deleteAllByTypeAndApplyId("日常开支",id);
+        Map<String, Object> map  = new HashMap<>();
+        System.out.println("删除的条数="+count);
+        if (count==0){
+            map.put("code",100);
+            map.put("message","无审核记录");
+        }else {
+            map.put("code",0);
+            map.put("message","撤回【"+count+"】条记录");
+        }
+        repository.delete(id);
+        return map;
     }
 
 }

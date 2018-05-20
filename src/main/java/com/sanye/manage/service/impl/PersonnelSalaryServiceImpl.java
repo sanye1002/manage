@@ -1,5 +1,6 @@
 package com.sanye.manage.service.impl;
 
+import com.sanye.manage.dataobject.PersonnelInfo;
 import com.sanye.manage.dataobject.PersonnelSalary;
 import com.sanye.manage.repository.PersonnelInfoRepository;
 import com.sanye.manage.repository.PersonnelSalaryRepository;
@@ -104,7 +105,6 @@ public class PersonnelSalaryServiceImpl implements PersonnelSalaryService {
         for (int i=1;i<sheet.getLastRowNum()+1;i++){
             Row row = sheet.getRow(i);//获取索引为i的行，以0开始
             String month = POIUtil.getValue(row.getCell(0));//获取第i行的索引为0的单元格数据
-
             if (month == null) {
                 break;
             }
@@ -129,10 +129,13 @@ public class PersonnelSalaryServiceImpl implements PersonnelSalaryService {
             if (personnelSalary==null){
                 personnelSalary = new PersonnelSalary();
             }
+
             personnelSalary.setMonth(month);
             personnelSalary.setPersonnelName(personnelName);
-
-            personnelSalary.setPersonnelId(personnelInfoRepository.findByPhone(phone).getId());
+            PersonnelInfo personnelInfo =personnelInfoRepository.findByPhone(phone);
+            if (personnelInfo!=null){
+                personnelSalary.setPersonnelId(personnelInfo.getId());
+            }
             personnelSalary.setPhone(phone);
             personnelSalary.setBaseSalary(baseSalary);
             personnelSalary.setJIXIAO(JIXIAO);
@@ -156,5 +159,10 @@ public class PersonnelSalaryServiceImpl implements PersonnelSalaryService {
     @Override
     public PersonnelSalary findByPhoneAndMonth(String phone, String month) {
         return salaryRepository.findByPhoneAndMonth(phone, month);
+    }
+
+    @Override
+    public Page<PersonnelSalary> findAllByPersonnelId(Pageable pageable, Integer id) {
+        return salaryRepository.findAllByPersonnelId(pageable, personnelInfoRepository.findByUserId(id).getId());
     }
 }

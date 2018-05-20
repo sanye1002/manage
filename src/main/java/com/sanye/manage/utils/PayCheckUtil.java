@@ -18,9 +18,13 @@ public class PayCheckUtil {
     public static Boolean check(){
         UserInfo userInfo = ShiroGetSession.getUserInfo();
         if (userInfo.getBankUserName()==null||userInfo.getBankType()==null||userInfo.getBankCardNumber()==null||userInfo.getAliPay()==null){
-            log.info("check={false}");
             return false;
         }
-        return true;
+        if (MobileExactUtil.isMobileExact(userInfo.getPhone())){
+            return true;
+        }
+        return false;
+
+
     }
 }

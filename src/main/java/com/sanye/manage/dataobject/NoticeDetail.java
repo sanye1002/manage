@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "notice_detail")
 public class NoticeDetail {
+
     @Id
     @GeneratedValue
     private Integer id;
@@ -24,11 +25,11 @@ public class NoticeDetail {
     /**
      * 发布人员id
      */
-    private Integer personnelId;
+    private Integer userId;
     /**
      * 发布人员姓名
      */
-    private String personnelName;
+    private String userName;
     /**
      * 标题
      */

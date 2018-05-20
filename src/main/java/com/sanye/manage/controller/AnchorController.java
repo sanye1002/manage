@@ -178,7 +178,12 @@ public class AnchorController {
         anchorInfo.setLiveId(anchorForm.getLiveId());
         anchorInfo.setPlatformId(anchorForm.getPlatformId());
         anchorInfo.setUserId(anchorForm.getUserId());
-        if (anchorForm != null) {
+        anchorInfo.setName(userService.findOne(anchorForm.getUserId()).getName());
+        anchorInfo.setNikeName(userService.findOne(anchorForm.getUserId()).getNikeName());
+        if (anchorForm.getPlatformId()!=null){
+            anchorInfo.setLivePlatform(platformService.findOne(anchorForm.getPlatformId()).getName());
+        }
+        if (anchorForm.getId() != null) {
             anchorInfo.setUpdateDate(GetTimeUtil.getTime());
         } else {
             anchorInfo.setShowStatus(1);
@@ -202,6 +207,21 @@ public class AnchorController {
         Map<String, Object> map = new HashMap<>();
         map=userService.delete(id);
         return ResultVOUtil.success(map);
+    }
+
+    @GetMapping("/congruent/{id}")
+    public ModelAndView addCongruent(Map<String, Object> map,
+                                     @PathVariable Integer id){
+        if (id==null){
+            return new ModelAndView("error/400", map);
+        }
+        UserInfo userInfo = userService.findOne(id);
+
+        map.put("userInfo", userInfo);
+        map.put("pageId", 13);
+        map.put("pageTitle", "劳务合同上传");
+        map.put("url","/oa/anchor/user/list.html");
+        return new ModelAndView("view/congruentImgAdd", map);
     }
 
 }

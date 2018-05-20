@@ -92,4 +92,6 @@ public interface RolePermissionService {
      * @return
      */
     List<Role> findAllRole();
+
+    List<Role> findAllByLevel(Integer level);
 }

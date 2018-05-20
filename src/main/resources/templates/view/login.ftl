@@ -39,7 +39,7 @@
             </div>
 
             <div class="loginbox-forgot">
-                <a href="">
+                <a href="/recover-password.html">
                     <span>忘记密码</span>
                     <i class="fa fa-question"></i>
                 </a>
@@ -74,64 +74,70 @@
     });
 </script>
 <script type="text/javascript">
+    document.onkeydown = function (event) {
+        var e = event || window.event;
+        if (e && e.keyCode == 13) { //回车键的键值为13
+            login(); //调用登录按钮的登录事件
+        }
+    };
+    function login() {
+        var phone = $("#phone").val();
+        var password = $("#password").val();
+        var code = $("#code:checked").val();
+
+
+        if (phone == "") {
+            layer.msg("手机号码不能为空，请重新输入！", {
+                time: 1000
+            });
+
+        } else if (password == "") {
+            layer.msg("密码不能为空，请重新输入！", {
+                time: 1000
+            });
+            return false;
+        } else if (code == undefined) {
+            layer.msg("请勾选登录安全事项！", {
+                time: 1000
+            });
+        } else {
+            $.post(
+                    "/account/sign-in",
+                    {
+                        phone: phone,
+                        password: password
+                    },
+                    function (res) {
+                        if (res.code==0){
+                            layer.msg(res.data.message, {
+                                time: 1000
+                            });
+                            if(res.data.code==0){
+                                var url =  window.location.pathname;
+                                var search = window.location.search;
+                                setTimeout(function () {
+                                    if (url=="/login.html"||url=="/login"){
+                                        location="/oa/user/index.html"
+                                    }else {
+                                        location=url+search
+                                    }
+                                },500)
+                            }
+                        }else {
+                            layer.msg(res.message, {
+                                time: 1000
+                            });
+                        }
+
+                    }
+            )
+        }
+    }
 
     $(function () {
-
         $("#submit").click(function () {
-            var phone = $("#phone").val();
-            var password = $("#password").val();
-            var code = $("#code:checked").val();
-
-
-            if (phone == "") {
-                layer.msg("手机号码不能为空，请重新输入！", {
-                    time: 1000
-                });
-
-            } else if (password == "") {
-                layer.msg("密码不能为空，请重新输入！", {
-                    time: 1000
-                });
-                return false;
-            } else if (code == undefined) {
-                layer.msg("请勾选登录安全事项！", {
-                    time: 1000
-                });
-            } else {
-                $.post(
-                        "/account/sign-in",
-                        {
-                            phone: phone,
-                            password: password
-                        },
-                        function (res) {
-                            if (res.code==0){
-                                layer.msg(res.data.message, {
-                                    time: 1000
-                                });
-                               if(res.data.code==0){
-                                  var url =  window.location.pathname;
-                                   var search = window.location.search;
-                                  setTimeout(function () {
-                                      if (url=="/login.html"||url=="/login"){
-                                          location="/oa/user/index.html"
-                                      }else {
-                                          location=url+search
-                                      }
-                                  },500)
-                               }
-                            }else {
-                                layer.msg(res.message, {
-                                    time: 1000
-                                });
-                            }
-
-                        }
-                )
-            }
-
+            login()
         })
-
     })
 </script>
 </body>

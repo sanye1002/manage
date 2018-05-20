@@ -13,4 +13,8 @@ public class RandomUtils {
         Random random = new Random();
         return random.nextInt(max)%(max-min+1)+min;
     }
+    public static Integer getRandom4Font(){
+        return (int)(Math.random()*8998)+1000+1;
+    }
+
 }

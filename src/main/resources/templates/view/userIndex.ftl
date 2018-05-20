@@ -2,6 +2,12 @@
 <html lang="en">
 <!-- header -->
 <#include "../common/header.ftl">
+<style>
+    @media (max-width: 800px){
+        #contact-map{display:none;}
+    }
+
+</style>
 <body>
 <!-- 导航 -->
 

@@ -15,19 +15,19 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
-@Table(name = "notice_personnel")
-public class NoticePersonnel {
+@Table(name = "notice_user")
+public class NoticeUserInfo {
     @Id
     @GeneratedValue
     private Integer id;
     /**
-     * 通知表Id
+     * 详情表Id
      */
-    private Integer noticeId;
+    private Integer detailId;
     /**
      * 用户ID
      */
-    private Integer personnelId;
+    private Integer userId;
     /**
      * 阅读状态
      */

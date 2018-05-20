@@ -148,7 +148,7 @@ public class PersonnelController {
         /**部门信息**/
         List<DeptInfo> deptInfoList = deptService.findByUser(deptNo);
         /**权限**/
-        List<Role> roleList = rolePermissionService.findAllRole();
+        List<Role> roleList = rolePermissionService.findAllByLevel(rolePermissionService.findOne(ShiroGetSession.getUserInfo().getRoleId()).getLevel());
         map.put("pageId", 11);
         map.put("pageTitle", "工作人员添加");
         map.put("deptInfoList", deptInfoList);
@@ -156,6 +156,21 @@ public class PersonnelController {
         map.put("roleList", roleList);
         map.put("userInfo", userInfo);
         return new ModelAndView("view/personnelAdd", map);
+    }
+
+    @GetMapping("/congruent/{id}")
+    public ModelAndView addCongruent(Map<String, Object> map,
+                                     @PathVariable Integer id){
+        if (id==null){
+            return new ModelAndView("error/400", map);
+        }
+        UserInfo userInfo = userService.findOne(id);
+
+        map.put("userInfo", userInfo);
+        map.put("pageId", 11);
+        map.put("pageTitle", "劳务合同上传");
+        map.put("url","/oa/personnel/list.html");
+        return new ModelAndView("view/congruentImgAdd", map);
     }
 
     /**

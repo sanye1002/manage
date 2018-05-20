@@ -9,6 +9,7 @@ import com.sanye.manage.service.AnchorService;
 import com.sanye.manage.service.PersonnelInfoService;
 import com.sanye.manage.service.UserService;
 import com.sanye.manage.utils.Encrypt;
+import com.sanye.manage.utils.ShiroGetSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
     // TODO: 2018/4/12 0012  主播
     // TODO: 2018/4/12 0012  权限
     @Override
-    public Map<String, Object> login(HttpServletRequest request,String phone, String password) {
+    public Map<String, Object> login(HttpServletRequest request, String phone, String password) {
         Map<String, Object> map = new HashMap<>();
 
         UserInfo userInfo = userInfoRepository.findByPhone(phone);
@@ -66,12 +67,12 @@ public class UserServiceImpl implements UserService {
             if (subject.isAuthenticated()) {
                 Session session = subject.getSession();
                 UserInfo user = userInfoRepository.findByPhoneAndPassword(phone, Encrypt.md5(password));
-                session.setAttribute("user",user);
-                UserInfo login = (UserInfo)session.getAttribute("user");
-                log.info("登录成功 用户信息={}",login.getName());
+                session.setAttribute("user", user);
+                UserInfo login = (UserInfo) session.getAttribute("user");
+                log.info("登录成功 用户信息={}", login.getName());
                 map.put("code", 0);
                 map.put("message", "登录成功！使用愉快！");
-                request.getSession().setAttribute("user",login);
+                request.getSession().setAttribute("user", login);
                 return map;
             }
             map.put("code", 100);
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
         }
         if ("anchor".equals(userInfo.getUserType())) {
             List<AnchorInfo> list = anchorInfoRepository.findAllByUserId(id);
-            for (int i=0;i<list.size();i++){
+            for (int i = 0; i < list.size(); i++) {
                 anchorService.delete(list.get(i).getId());
             }
 
@@ -146,7 +147,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserInfo> findAllByUserTypeAndStatusAndShowStatus(Pageable pageable , String userType, Integer status) {
-        return userInfoRepository.findAllByUserTypeAndStatusAndShowStatus(pageable,userType,status,1);
+    public Page<UserInfo> findAllByUserTypeAndStatusAndShowStatus(Pageable pageable, String userType, Integer status) {
+        return userInfoRepository.findAllByUserTypeAndStatusAndShowStatus(pageable, userType, status, 1);
+    }
+
+    @Override
+    public List<UserInfo> findAllForNoticeByUserType(String userType) {
+        if (userType.equals("all")){
+            if (personnelInfoRepository.findByUserId(ShiroGetSession.getUserInfo().getId()).getDeptNo().equals("001")){
+                return userInfoRepository.findAllByStatusAndShowStatus(1, 1);
+            }else {
+                return null;
+            }
+        }
+        return userInfoRepository.findAllByStatusAndShowStatusAndUserType(1, 1,userType);
     }
 }

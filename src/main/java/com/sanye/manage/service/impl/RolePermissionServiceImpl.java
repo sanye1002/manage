@@ -54,6 +54,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         roleDTO.setId(role.getId());
         roleDTO.setName(role.getName());
         roleDTO.setDescription(role.getDescription());
+        roleDTO.setLevel(role.getLevel());
         roleDTO.setPermissionList(permissionList);
         return roleDTO;
     }
@@ -165,5 +166,15 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     @Override
     public List<Role> findAllRole() {
         return roleRepository.findAll(SortTools.basicSort());
+    }
+
+    @Override
+    public List<Role> findAllByLevel(Integer level) {
+        if (level==1){
+            return findAllRole();
+        }else {
+            return roleRepository.findAllByLevel(3);
+        }
+
     }
 }

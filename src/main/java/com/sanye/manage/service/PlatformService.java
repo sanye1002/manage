@@ -1,6 +1,7 @@
 package com.sanye.manage.service;
 
 import com.sanye.manage.dataobject.PlatformInfo;
+import com.sanye.manage.dataobject.UserInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -46,4 +47,6 @@ public interface PlatformService {
      * @return
      */
     PlatformInfo findOne(Integer id);
+
+    List<UserInfo> findAllUserInfoByPlatformId(Integer platformId);
 }

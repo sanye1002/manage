@@ -186,29 +186,36 @@
             salaryAdvance.description = $("#description").val();
             salaryAdvance.title = $("#title").val();
             salaryAdvance.platformId=$("#platform").val();
-            $.post(
-                    "/oa/anchorSalaryAdvance/save",
-                    {
-                        salary: salaryAdvance.salary
-                        , title: salaryAdvance.title
-                        , userId: salaryAdvance.userId
-                        , anchorName: salaryAdvance.anchorName
-                        , platformId: salaryAdvance.platformId
-                        , description: salaryAdvance.description
-                    },
-                    function (res) {
-                        layer.msg(res.message, {
-                            time: 1000
-                        });
-                        if (res.code == 0) {
-                            setTimeout(function () {
-                                location="/oa/anchorSalaryAdvance/img/"+res.data.id
-                            }, 1000)
+            if(salaryAdvance.salary!=""){
+                $.post(
+                        "/oa/anchorSalaryAdvance/save",
+                        {
+                            salary: salaryAdvance.salary
+                            , title: salaryAdvance.title
+                            , userId: salaryAdvance.userId
+                            , anchorName: salaryAdvance.anchorName
+                            , platformId: salaryAdvance.platformId
+                            , description: salaryAdvance.description
+                        },
+                        function (res) {
+                            layer.msg(res.message, {
+                                time: 1000
+                            });
+                            if (res.code == 0) {
+                                setTimeout(function () {
+                                    location="/oa/anchorSalaryAdvance/img/"+res.data.id
+                                }, 1000)
 
+                            }
+                            //如果上传失败
                         }
-                        //如果上传失败
-                    }
-            )
+                )
+            }else {
+                layer.msg("请输入你的金额！！！！", {
+                    time: 1000
+                });
+            }
+
         })
 
 

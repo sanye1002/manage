@@ -213,8 +213,26 @@ public class PersonnelSalaryAdvanceController {
         personnelSalaryAdvance.setCheckPersonnelId(personnelInfo.getId());
         personnelSalaryAdvance.setCheckPersonnelName(personnelInfo.getName());
         personnelSalaryAdvance.setBackStatus(0);
-        salaryAdvanceService.save(personnelSalaryAdvance);
-        return ResultVOUtil.success();
+        PersonnelSalaryAdvance resultSalary = salaryAdvanceService.save(personnelSalaryAdvance);
+        //发送短信
+        Map<String,Object> map = new HashMap<>();
+        UserInfo messageUser = userService.findOne(personnelInfoService.findById(resultSalary.getPersonnelId()).getUserId());
+        String phone = messageUser.getPhone();
+        String username = messageUser.getName();
+        String type = "工资预支";
+        String result;
+        if (resultStatus == 1) {
+            result = "通过,已拨款";
+        } else {
+            result = "审核失败";
+        }
+
+        if(SendMessageUtil.sendSalaryTypeMessage(phone, username, type, result)){
+            map.put("message","短信发送成功！");
+        }else {
+            map.put("message","短信发送失败！");
+        }
+        return ResultVOUtil.success(map);
     }
 
     /**
@@ -258,6 +276,20 @@ public class PersonnelSalaryAdvanceController {
         map.put("size", size);
         map.put("currentPage", page);
         return new ModelAndView("view/personnelSalaryAdvanceListByUser", map);
+    }
+    @PostMapping("/revoke")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> revoke(@RequestParam("id") Integer id){
+        return ResultVOUtil.success(salaryAdvanceService.revoke(id));
+    }
+
+    @PostMapping("/remove/img")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> removeImg(@RequestParam("id") Integer id){
+        PersonnelSalaryAdvance personnelSalaryAdvance = salaryAdvanceService.findOne(id);
+        personnelSalaryAdvance.setImg("");
+        salaryAdvanceService.save(personnelSalaryAdvance);
+        return ResultVOUtil.success();
     }
 
 }

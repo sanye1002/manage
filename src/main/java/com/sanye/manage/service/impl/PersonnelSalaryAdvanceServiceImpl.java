@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: popo
@@ -81,5 +83,21 @@ public class PersonnelSalaryAdvanceServiceImpl implements PersonnelSalaryAdvance
     @Override
     public List<PersonnelSalaryAdvance> findAllByMonthAndResultStatus(String month, Integer resultStatus) {
         return personnelSalaryAdvanceRepository.findAllByMonthAndResultStatus(month, resultStatus);
+    }
+
+    @Override
+    public Map<String, Object> revoke(Integer id) {
+        Integer count = checkInfoRepository.deleteAllByTypeAndApplyId("工作人员工资预支",id);
+        Map<String, Object> map  = new HashMap<>();
+        System.out.println("删除的条数="+count);
+        if (count==0){
+           map.put("code",100);
+           map.put("message","无审核记录");
+        }else {
+            map.put("code",0);
+            map.put("message","撤回【"+count+"】条记录");
+        }
+        personnelSalaryAdvanceRepository.delete(id);
+        return map;
     }
 }

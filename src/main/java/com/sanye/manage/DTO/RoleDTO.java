@@ -21,6 +21,8 @@ public class RoleDTO {
      * 角色说明
      **/
     private String description;
+
+    private Integer level;
     /**
      * 权限
      */

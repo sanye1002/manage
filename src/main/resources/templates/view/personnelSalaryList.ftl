@@ -92,6 +92,8 @@
                                         <th>应扣小计</th>
                                         <th>实发金额</th>
                                         <th>备注</th>
+                                        <th>确认状态</th>
+                                        <th>拨款状态</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
@@ -113,7 +115,26 @@
                                             <td>${mm.getYINGKOUXIAOJI()}</td>
                                             <td>${mm.getRealSalary()}</td>
                                             <td>${mm.getRemark()}</td>
-                                            <td>操作</td>
+                                            <#if mm.getConfirmStatus() == 0>
+                                                    <td>未确认</td>
+                                                <#else >
+                                                    <td>已确认</td>
+                                            </#if>
+                                            <#if mm.getGrantsStatus() == 0>
+                                                    <td>未拨款</td>
+                                                    <td>
+                                                        <a class="btn btn-info btn-xs" onclick="grants(${mm.getId()})">
+                                                            <i class="fa fa-edit"></i> 拨款
+                                                        </a>
+                                                    </td>
+                                                <#else >
+                                                    <td>已拨款</td>
+                                                    <td>
+                                                        <a class="btn btn-info btn-xs" onclick="granted()">
+                                                            <i class="fa fa-edit"></i> 已拨款
+                                                        </a>
+                                                    </td>
+                                            </#if>
                                         </tr>
                                         </#list>
 
@@ -163,6 +184,48 @@
 <#include "../common/footjs.ftl">
 <script src="/layui/layui.js" charset="utf-8"></script>
 <script>
+    function grants(id) {
+        layer.confirm('确定已给员工拨款？', {
+            btn: ['确认', '取消'] //按钮
+        }, function () {
+            layer.closeAll();
+            layer.msg('请稍等...', {
+                icon: 16
+                , shade: 0.01
+            });
+            //执行POST请求
+            $.post(
+                    "/oa/personnelSalary/grants",
+                    {id: id},
+                    function (res) {
+                        if (res.code==0){
+                            layer.msg(res.message+"----"+res.data.message, {
+                                time: 1000
+                            });
+                        }else {
+                            layer.msg(res.message, {
+                                time: 1000
+                            });
+                        }
+                        if (res.code == 0) {
+                            setTimeout(function () {
+                                layer.closeAll();
+                                var month = $("#month").val();
+                                if (month != "") {
+                                    location = "/oa/personnelSalary/list.html?month=" + month
+                                }
+                            }, 1000);
+                        }
+                    }
+            )
+
+        });
+    }
+    function granted() {
+        layer.msg("已拨款", {
+            time: 1000
+        });
+    }
     layui.use('upload', function () {
         var $ = layui.jquery
                 , upload = layui.upload;

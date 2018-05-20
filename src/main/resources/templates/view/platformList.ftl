@@ -64,8 +64,8 @@
                                        name="pullModel-add_area_row">添加平台</a>
                                 </div>
                             </div>
-
-                            <table class="table table-bordered table-hover">
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
                                     <th>#ID</th>
@@ -94,6 +94,8 @@
                                     </#list>
                                 </tbody>
                             </table>
+                            </div>
+
                            <#include "../common/page.ftl">
                         </div>
                     </div>

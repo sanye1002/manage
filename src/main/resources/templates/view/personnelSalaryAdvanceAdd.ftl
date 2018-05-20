@@ -174,30 +174,36 @@
             salaryAdvance.salary = $("#salary").val();
             salaryAdvance.description = $("#description").val();
             salaryAdvance.title = $("#title").val();
+            if (salaryAdvance.salary==""){
+                layer.msg("请输入金额！！！", {
+                    time: 1000
+                });
+            }else {
+                $.post(
+                        "/oa/personnelSalaryAdvance/save",
+                        {
+                            salary: salaryAdvance.salary
+                            , title: salaryAdvance.title
+                            , personnelId: salaryAdvance.personnelId
+                            , personnelName: salaryAdvance.personnelName
+                            , deptNo: salaryAdvance.deptNo
+                            , description: salaryAdvance.description
+                        },
+                        function (res) {
+                            layer.msg(res.message, {
+                                time: 1000
+                            });
+                            if (res.code == 0) {
+                                setTimeout(function () {
+                                    location="/oa/personnelSalaryAdvance/img/"+res.data.id
+                                }, 1000)
 
-            $.post(
-                    "/oa/personnelSalaryAdvance/save",
-                    {
-                        salary: salaryAdvance.salary
-                        , title: salaryAdvance.title
-                        , personnelId: salaryAdvance.personnelId
-                        , personnelName: salaryAdvance.personnelName
-                        , deptNo: salaryAdvance.deptNo
-                        , description: salaryAdvance.description
-                    },
-                    function (res) {
-                        layer.msg(res.message, {
-                            time: 1000
-                        });
-                        if (res.code == 0) {
-                            setTimeout(function () {
-                                location="/oa/personnelSalaryAdvance/img/"+res.data.id
-                            }, 1000)
-
+                            }
+                            //如果上传失败
                         }
-                        //如果上传失败
-                    }
-            )
+                )
+            }
+
         })
 
 

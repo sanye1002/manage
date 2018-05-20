@@ -1,9 +1,11 @@
 package com.sanye.manage.shiro;
 
 import com.sanye.manage.DTO.RoleDTO;
+import com.sanye.manage.dataobject.Permission;
 import com.sanye.manage.dataobject.UserInfo;
 import com.sanye.manage.service.RolePermissionService;
 import com.sanye.manage.service.UserService;
+import com.sanye.manage.utils.ShiroGetSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author: 八哥
@@ -27,6 +31,8 @@ public class MyRealm extends AuthorizingRealm {
     private UserService userService;
     @Autowired
     private RolePermissionService rolePermissionService;
+    @Autowired
+    private ShiroGetSession shiroGetSession;
     /**
      * 授权
      * @param principalCollection
@@ -38,15 +44,12 @@ public class MyRealm extends AuthorizingRealm {
         String username = (String) principalCollection.getPrimaryPrincipal();
         if(username!=null){
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-            UserInfo user = userService.findByPhone(username);
+            UserInfo user = ShiroGetSession.getUserInfo();
             if(user!=null){
                 if(user.getRoleId()!=null){
                     // TODO: 2018/4/14 权限
-                    RoleDTO roleDTO = rolePermissionService.findOne(user.getRoleId());
-
-
-                    if(!roleDTO.getPermissionList().isEmpty()){
-                        roleDTO.getPermissionList().forEach(v-> info.addStringPermission(v.getMethod()));
+                    if(!shiroGetSession.permissionList().isEmpty()){
+                        shiroGetSession.permissionList().forEach(v-> info.addStringPermission(v.getMethod()));
                     }
                 }
                 return info;

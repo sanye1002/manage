@@ -91,6 +91,7 @@ public class RoleController {
         role.setId(roleForm.getId());
         role.setName(roleForm.getName());
         role.setDescription(roleForm.getDescription());
+        role.setLevel(roleForm.getLevel());
         Role result = rolePermissionService.saveRole(role);
         rolePermissionService.save(result.getId(),roleForm.getIdList());
         return ResultVOUtil.success();

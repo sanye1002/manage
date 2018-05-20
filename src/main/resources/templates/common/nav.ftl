@@ -20,12 +20,12 @@
             <div class="navbar-header pull-right">
                 <div class="navbar-account">
                     <ul class="account-area">
-                        <li class="" >
+                        <#--<li class="" >
 
                             <a class=" dropdown-toggle" id="LifeShow"  data-toggle="dropdown" title="生活显示" >
                                 <i class="icon fa  fa-rss"></i>
                             </a>
-                            <!--Notification Dropdown-->
+                            <!--Notification Dropdown&ndash;&gt;
                             <ul class="pull-right dropdown-menu dropdown-arrow dropdown-notifications">
 
                                 <li>
@@ -85,11 +85,11 @@
                                         </span>
                                 </li>
                             </ul>
-                            <!--/Notification Dropdown-->
-                        </li>
+                            <!--/Notification Dropdown&ndash;&gt;
+                        </li>-->
                         <li class="">
                             <a class="dropdown-toggle" data-toggle="dropdown" title="帮助中心" href="#">
-                                <i class="icon fa fa-phone"></i>
+                                <i class="icon fa fa-comments"></i>
 
                             </a>
 
@@ -119,73 +119,30 @@
                             </ul>
                             <!--/Messages Dropdown-->
                         </li>
-                        <li>
-                            <a class="wave in dropdown-toggle" data-toggle="dropdown" title="Help" href="#">
+                        <li id="notice-box">
+                            <a class="wave in dropdown-toggle" data-toggle="dropdown" title="通知" href="#">
                                 <i class="icon fa fa-envelope"></i>
-                                <span class="badge">3</span>
+                                <span class="badge badge-darkorange graded" id="notice-number">0</span>
                             </a>
                             <!--Messages Dropdown-->
-                            <ul class="pull-right dropdown-menu dropdown-arrow dropdown-messages">
-                                <li>
-                                    <a href="#">
+                            <ul class="pull-right dropdown-menu dropdown-arrow dropdown-messages" id="notice-list">
+                                <#--<li>
+                                    <a href="/oa/notice/system/read.html?id=">
                                         <img src="/layui/images/model.jpg" class="message-avatar"
                                              alt="Divyia Austin">
                                         <div class="message">
                                                 <span class="message-sender">
-                                                    Divyia Austin
+                                                    发生人
                                                 </span>
                                             <span class="message-time">
-                                                    2 minutes ago
+                                                    时间
                                                 </span>
                                             <span class="message-subject">
-                                                    Here's the recipe for apple pie
-                                                </span>
-                                            <span class="message-body">
-                                                    to identify the sending application when the senders image is shown for the main icon
+                                                    标题
                                                 </span>
                                         </div>
                                     </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/layui/images/model.jpg" class="message-avatar"
-                                             alt="Microsoft Bing">
-                                        <div class="message">
-                                                <span class="message-sender">
-                                                    Bing.com
-                                                </span>
-                                            <span class="message-time">
-                                                    Yesterday
-                                                </span>
-                                            <span class="message-subject">
-                                                    Bing Newsletter: The January Issue‏
-                                                </span>
-                                            <span class="message-body">
-                                                    Discover new music just in time for the Grammy® Awards.
-                                                </span>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/img/avatars/adam-jansen.jpg" class="message-avatar"
-                                             alt="Divyia Austin">
-                                        <div class="message">
-                                                <span class="message-sender">
-                                                    Nicolas
-                                                </span>
-                                            <span class="message-time">
-                                                    Friday, September 22
-                                                </span>
-                                            <span class="message-subject">
-                                                    New 4K Cameras
-                                                </span>
-                                            <span class="message-body">
-                                                    The 4K revolution has come over the horizon and is reaching the general populous
-                                                </span>
-                                        </div>
-                                    </a>
-                                </li>
+                                </li>-->
                             </ul>
                             <!--/Messages Dropdown-->
                         </li>
@@ -196,13 +153,13 @@
                                     <img id="user-avatar-1" src="/layui/images/model.jpg" width="29px" height="29px">
                                 </div>
                                 <section>
-                                    <h2><span class="profile"><span id="user-username-1">David Stevenson</span></span></h2>
+                                    <h2><span class="profile"><span id="user-username-1">用户名</span></span></h2>
                                 </section>
                             </a>
                             <!--Login Area Dropdown-->
                             <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
-                                <li class="username"><a id="user-username-2">David Stevenson</a></li>
-                                <li class="email"><a id="user-phone">David.Stevenson@live.com</a></li>
+                                <li class="username"><a id="user-username-2">用户名</a></li>
+                                <li class="email"><a id="user-phone">手机号码</a></li>
                                 <!--Avatar Area-->
                                 <li>
                                     <div class="avatar-area">

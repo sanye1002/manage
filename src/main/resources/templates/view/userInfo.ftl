@@ -136,7 +136,7 @@
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="userPhone"
                                                        value="${userInfo.getPhone()!}">
-                                                <small>注意：手机作为登录的唯一凭证，请谨慎修改！</small>
+                                                <small>注意：手机必须真实,如果虚假信息导致拨款无法审核,后果自负！</small>
                                             </div>
                                         </div>
                                         <div class="form-group text-align-right">
@@ -269,6 +269,15 @@
 <#include "../common/footjs.ftl">
 <script src="/layui/layui.js" charset="utf-8"></script>
 <script>
+    function exact() {
+        var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+        if(!myreg.test("${userInfo.getPhone()}")){
+            Notify('请输入正确的手机号码', 'bottom-right', '9000', 'danger', 'fa-warning', true);
+            Notify('手机必须真实,如果虚假信息导致拨款无法审核,后果自负', 'bottom-right', '9000', 'warning', 'fa-warning', true);
+        }
+
+    }
+    exact()
     var flot = false;
     layui.use('upload', function () {
         var $ = layui.jquery

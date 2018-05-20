@@ -26,6 +26,8 @@ public class RoleForm {
      **/
     private String description;
 
+    private Integer level;
+
     private List<Integer> idList;
 
 

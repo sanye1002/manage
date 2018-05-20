@@ -63,22 +63,25 @@
                                        name="pullModel-add_area_row">添加角色</a>
                                 </div>
                             </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>#ID</th>
-                                    <th>名称</th>
-                                    <th >描述</th>
-                                    <th >权限</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#ID</th>
+                                        <th>名称</th>
+                                        <th >描述</th>
+                                        <th >级别</th>
+                                        <th >权限</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                 <#list pageContent.getPageContent() as r>
                                 <tr id="${r.id}" <#if r.id%2!=0>class="success"</#if>>
                                     <td>${r.id}</td>
                                     <td>${r.name}</td>
                                     <td>${r.description}</td>
+                                    <td>${r.level}</td>
                                     <td style="max-width: 800px">
                                        <#list r.getPermissionList() as per>
                                            ${per.name} &nbsp;
@@ -87,13 +90,15 @@
                                     </td>
                                     <td>
                                         <a href="/oa/role/index.html?id=${r.id}" target="_self" name="pullModel-row_edit_character" class="btn btn-info btn-xs"><i class="fa fa-edit"></i> 编辑</a>
-                                        <#--<a  onclick="dele(${r.id})"  class="btn btn-danger btn-xs edit"><i class="fa fa-edit"></i> 删除</a>-->
+                                    <#--<a  onclick="dele(${r.id})"  class="btn btn-danger btn-xs edit"><i class="fa fa-edit"></i> 删除</a>-->
                                     </td>
                                 </tr>
                                 </#list>
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <#include "../common/page.ftl">
                         </div>
                     </div>

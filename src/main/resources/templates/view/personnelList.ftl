@@ -104,24 +104,26 @@
                                     </div>
                                 </div>
                             </form>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover" id="my_tabel">
+                                    <thead>
+                                    <tr>
 
-                                    <th>头像</th>
-                                    <th>姓名</th>
-                                    <th>年龄</th>
-                                    <th>电话</th>
-                                    <th>性别</th>
-                                    <th>角色</th>
-                                    <th>部门</th>
-                                    <th>添加时间</th>
-                                    <th colspan="3">操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                                        <th>头像</th>
+                                        <th>姓名</th>
+                                        <th>年龄</th>
+                                        <th>电话</th>
+                                        <th>性别</th>
+                                        <th>角色</th>
+                                        <th>部门</th>
+                                        <th>添加时间</th>
+                                        <th>入职时间</th>
+                                        <th colspan="4">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                 <#list pageContent.getPageContent() as items>
-                                <tr id="${items.id}" <#if items.id== items.getDeptDTO().getPersonnelInfo().getId()!>class="success"</#if> style="height: 50px;text-align: center">
+                                <tr id="${items.id}" <#if items.id== items.getDeptDTO().getPersonnelInfo().getId()!>class="success"</#if> style="height: 50px;">
 
                                     <td><img src="${items.getUserInfo().getAvatar()!}" height="40px"></td>
                                     <td>${items.getUserInfo().getName()}</td>
@@ -134,6 +136,7 @@
                                     <td>${items.getRole().getName()}</td>
                                     <td>${items.getDeptDTO().getDeptName()}</td>
                                     <td>${items.getUserInfo().getCreateDate()}</td>
+                                    <td>${items.getUserInfo().getJoinTime()!}</td>
                                     <td>
                                         <a href="/oa/personnel/index.html?id=${items.getId()}"
                                            class="btn btn-info btn-xs"><i class="fa fa-edit"></i> 编辑</a>
@@ -145,12 +148,24 @@
                                     <td>
                                         <a class="btn btn-info btn-xs" onclick="showSFZ(${items.getUserInfo().getId()})"><i class="fa fa-edit"></i> 身份证</a>
                                     </td>
+                                    <#if items.getUserInfo().getCongruentImgs()! == "">
+                                        <td>
+                                            <a class="btn btn-info btn-xs" href="/oa/personnel/congruent/${items.getUserInfo().getId()}.html"><i class="fa fa-edit"></i> 档案添加</a>
+                                        </td>
+                                    <#else>
+                                        <td>
+                                            <a class="btn btn-warning btn-xs" onclick="showHeTong(${items.getUserInfo().getId()})"><i class="fa fa-edit"></i> 档案展示</a>
+                                        </td>
+                                    </#if>
+
 
                                 </tr>
                                 </#list>
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <div class="margin-top-30 text-align-right">
                                 <div class="next">
                                     <ul class="pagination">
@@ -227,6 +242,14 @@
 <script>
  function showSFZ(id) {
      $.getJSON('/layer/photos/'+id, function(json){
+         layer.photos({
+             photos: json
+             ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+         });
+     });
+ }
+ function showHeTong(id) {
+     $.getJSON('/layer/congruent/'+id, function(json){
          layer.photos({
              photos: json
              ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）

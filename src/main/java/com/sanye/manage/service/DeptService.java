@@ -2,6 +2,7 @@ package com.sanye.manage.service;
 
 import com.sanye.manage.DTO.DeptDTO;
 import com.sanye.manage.dataobject.DeptInfo;
+import com.sanye.manage.dataobject.UserInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -61,4 +62,8 @@ public interface DeptService {
     List<DeptInfo> findByUser(String deptNo);
 
     DeptInfo findOneByDeptNo(String deptNo);
+
+    List<UserInfo> findAllUserInfoByDeptId(Integer deptId);
+
+    List<DeptInfo> findAll();
 }

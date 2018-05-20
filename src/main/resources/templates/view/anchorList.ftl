@@ -93,22 +93,23 @@
                                     </div>
                                 </div>
                             </form>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>头像</th>
-                                    <th>姓名</th>
-                                    <th>昵称</th>
-                                    <th>年龄</th>
-                                    <th>电话</th>
-                                    <th>性别</th>
-                                    <th>平台</th>
-                                    <th>直播ID</th>
-                                    <th>添加时间</th>
-                                    <th colspan="3">操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>头像</th>
+                                        <th>姓名</th>
+                                        <th>昵称</th>
+                                        <th>年龄</th>
+                                        <th>电话</th>
+                                        <th>性别</th>
+                                        <th>平台</th>
+                                        <th>直播ID</th>
+                                        <th>添加时间</th>
+                                        <th colspan="3">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                 <#list pageContent.getPageContent() as items>
                                 <tr id="${items.id}" <#if items.id%2!=0>class="success"</#if> style="height: 50px;text-align: center">
 
@@ -142,8 +143,9 @@
                                 </tr>
                                 </#list>
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="margin-top-30 text-align-right">
                                 <div class="next">
                                     <ul class="pagination">

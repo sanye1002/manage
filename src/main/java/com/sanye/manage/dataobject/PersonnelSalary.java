@@ -85,6 +85,12 @@ public class PersonnelSalary {
      */
     private String remark;
 
+    private Integer confirmStatus =0;
+
+    private Integer grantsStatus = 0;
+
+
+
 
 
 

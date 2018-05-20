@@ -31,4 +31,6 @@ public interface UserService {
     List<UserInfo> findAllByUserType(String userType);
 
     Page<UserInfo> findAllByUserTypeAndStatusAndShowStatus(Pageable pageable,String userType, Integer status);
+
+    List<UserInfo> findAllForNoticeByUserType(String userType);
 }

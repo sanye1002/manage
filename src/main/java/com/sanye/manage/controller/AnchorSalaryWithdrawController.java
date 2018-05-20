@@ -47,6 +47,8 @@ public class AnchorSalaryWithdrawController {
     private CheckService checkService;
     @Autowired
     private PersonnelInfoService personnelInfoService;
+    @Autowired
+    private UserService userService;
     @PostMapping("/salary")
     @ResponseBody
     public ResultVO<Map<String,Object>> salary(@RequestParam BigDecimal salary,
@@ -58,10 +60,11 @@ public class AnchorSalaryWithdrawController {
         // TODO: 2018/4/26 0026 判断平台主播工资
         if (platformInfo.getName().equals("陌陌")){
             MOMOAnchorSalary momoAnchorSalary = momoAnchorSalaryService.findOne(id);
-            if (momoAnchorSalary.getAfterTax().compareTo(salary)==-1){
+            if (momoAnchorSalary.getMentionable().compareTo(salary)==-1){
                 return ResultVOUtil.error(100, "申请金额大于剩余金额！");
             }
-            momoAnchorSalary.setTiXian(salary);
+            momoAnchorSalary.setSystemTX(momoAnchorSalary.getSystemTX().add(salary));
+            momoAnchorSalary.setMentionable(momoAnchorSalary.getMentionable().subtract(salary));
             momoAnchorSalaryService.save(momoAnchorSalary);
         }
 
@@ -173,8 +176,26 @@ public class AnchorSalaryWithdrawController {
         anchorSalaryWithdraw.setCheckTime(GetTimeUtil.getTime());
         anchorSalaryWithdraw.setCheckPersonnelId(personnelInfo.getId());
         anchorSalaryWithdraw.setCheckPersonnelName(personnelInfo.getName());
-        withdrawService.save(anchorSalaryWithdraw);
-        return ResultVOUtil.success();
+        AnchorSalaryWithdraw resultWithdraw = withdrawService.save(anchorSalaryWithdraw);
+        //发送短信
+        Map<String,Object> map = new HashMap<>();
+        UserInfo messageUser = userService.findOne(resultWithdraw.getUserId());
+        String phone = messageUser.getPhone();
+        String username = messageUser.getName();
+        String type = "工资提现审核";
+        String result;
+        if (resultStatus == 1) {
+            result = "通过,已拨款";
+        } else {
+            result = "审核失败";
+        }
+
+        if(SendMessageUtil.sendSalaryTypeMessage(phone, username, type, result)){
+            map.put("message","短信发送成功！");
+        }else {
+            map.put("message","短信发送失败！");
+        }
+        return ResultVOUtil.success(map);
     }
 
 

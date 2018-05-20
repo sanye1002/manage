@@ -60,21 +60,22 @@
                             <div style="float:right;margin-right:2px;">
                                 <a href="/oa/item/index.html" target="_self" class="btn btn-success">添加物品</a>
                             </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>编号</th>
-                                    <th>名称</th>
-                                    <th>颜色样式</th>
-                                    <th>详细描述</th>
-                                    <th>一共数量</th>
-                                    <th>剩余数量</th>
-                                    <th>添加时间</th>
-                                    <th>更新时间</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>名称</th>
+                                        <th>颜色样式</th>
+                                        <th>详细描述</th>
+                                        <th>一共数量</th>
+                                        <th>剩余数量</th>
+                                        <th>添加时间</th>
+                                        <th>更新时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                 <#list pageContent.getContent() as p>
                                 <tr id="${p.getId()}">
                                     <td>${p.getNumber()}</td>
@@ -97,8 +98,10 @@
                                     </td>
                                 </tr>
                                 </#list>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
                            <#include "../common/page.ftl">
                         </div>
                     </div>

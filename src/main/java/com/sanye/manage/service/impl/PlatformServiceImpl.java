@@ -1,7 +1,11 @@
 package com.sanye.manage.service.impl;
 
+import com.sanye.manage.dataobject.AnchorInfo;
 import com.sanye.manage.dataobject.PlatformInfo;
+import com.sanye.manage.dataobject.UserInfo;
+import com.sanye.manage.repository.AnchorInfoRepository;
 import com.sanye.manage.repository.PlatformInfoRepository;
+import com.sanye.manage.repository.UserInfoRepository;
 import com.sanye.manage.service.PlatformService;
 import com.sanye.manage.utils.SortTools;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +31,10 @@ public class PlatformServiceImpl implements PlatformService {
 
     @Autowired
     private PlatformInfoRepository platformInfoRepository;
+    @Autowired
+    private AnchorInfoRepository anchorInfoRepository;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     @Override
     public PlatformInfo save(PlatformInfo platformInfo) {
@@ -54,5 +63,17 @@ public class PlatformServiceImpl implements PlatformService {
     @Override
     public PlatformInfo findOne(Integer id) {
         return platformInfoRepository.findOne(id);
+    }
+
+    @Override
+    public List<UserInfo> findAllUserInfoByPlatformId(Integer platformId) {
+        List<UserInfo> userInfoList = new ArrayList<>();
+        List<AnchorInfo> anchorInfoList = anchorInfoRepository.findAllByPlatformId(platformId);
+        if (!anchorInfoList.isEmpty()){
+            anchorInfoList.forEach(a->{
+                userInfoList.add(userInfoRepository.findOne(a.getUserId()));
+            });
+        }
+        return userInfoList;
     }
 }

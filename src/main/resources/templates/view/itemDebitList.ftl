@@ -90,22 +90,22 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>借记物品</th>
-                                    <th>借记人</th>
-                                    <th>借记时间</th>
-                                    <th>数量</th>
-                                    <th>备注</th>
-                                    <th>归还状态</th>
-                                    <th>归还时间</th>
-                                    <th>审核流程结果</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                            <div class="table-scrollable">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>借记物品</th>
+                                        <th>借记人</th>
+                                        <th>借记时间</th>
+                                        <th>数量</th>
+                                        <th>备注</th>
+                                        <th>归还状态</th>
+                                        <th>归还时间</th>
+                                        <th>审核流程结果</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
                                 <#list pageContent.getPageContent() as p>
                                 <tr id="${p.getItemDebit().getId()}"
                                     <#if p.getItemDebit().getBackStatus()==1>class="success" </#if>
@@ -155,8 +155,10 @@
                                     </td>
                                 </tr>
                                 </#list>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <div class="margin-top-30 text-align-right">
                                 <div class="next">
                                     <ul class="pagination">

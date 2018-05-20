@@ -5,11 +5,16 @@ import com.sanye.manage.config.UploadConfig;
 import com.sanye.manage.dataobject.FileInfo;
 import com.sanye.manage.dataobject.MOMOAnchorSalary;
 import com.sanye.manage.dataobject.PersonnelSalary;
+import com.sanye.manage.dataobject.UserInfo;
 import com.sanye.manage.exception.WebException;
 import com.sanye.manage.service.FileInfoService;
+import com.sanye.manage.service.PersonnelInfoService;
 import com.sanye.manage.service.PersonnelSalaryService;
+import com.sanye.manage.service.UserService;
 import com.sanye.manage.utils.GetTimeUtil;
 import com.sanye.manage.utils.ResultVOUtil;
+import com.sanye.manage.utils.SendMessageUtil;
+import com.sanye.manage.utils.ShiroGetSession;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +51,10 @@ public class PersonnelSalaryController {
     private UploadConfig uploadConfig;
     @Autowired
     private FileInfoService fileInfoService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PersonnelInfoService personnelInfoService;
 
     @GetMapping("/list")
     @RequiresPermissions("personnelSalary:list")
@@ -66,6 +75,22 @@ public class PersonnelSalaryController {
         map.put("size", size);
         map.put("currentPage", page);
         return new ModelAndView("view/personnelSalaryList");
+    }
+    @GetMapping("/list/user")
+    @RequiresPermissions("personnelSalary:tag")
+    public ModelAndView listUser(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                             @RequestParam(value = "size", defaultValue = "15") Integer size,
+                             Map<String, Object> map) {
+        PageRequest pageRequest = new PageRequest(page - 1, size);
+
+        Page<PersonnelSalary> personnelSalaryPage = personnelSalaryService.findAllByPersonnelId(pageRequest,ShiroGetSession.getUserInfo().getId());
+        map.put("pageId", 37);
+        map.put("pageTitle", "工作个人人员工资");
+        map.put("pageContent", personnelSalaryPage);
+        map.put("url", "/oa/personnelSalary/list/user.html");
+        map.put("size", size);
+        map.put("currentPage", page);
+        return new ModelAndView("view/personnelSalaryListUser");
     }
 
     @PostMapping("/save")
@@ -90,6 +115,7 @@ public class PersonnelSalaryController {
         fileInfoService.save(fileInfo);
         return ResultVOUtil.success();
     }
+
     @GetMapping("/downLoad/{month}/{id}")
     public ResponseEntity<FileSystemResource> exportExcel(@PathVariable String month,
                                                           @PathVariable Integer id) {
@@ -114,6 +140,40 @@ public class PersonnelSalaryController {
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(new FileSystemResource(file));
     }
+   @PostMapping("/confirm")
+   @ResponseBody
+   public ResultVO<Map<String,Object>> confirm(@RequestParam Integer id){
+        PersonnelSalary personnelSalary = personnelSalaryService.findOne(id);
+        if (personnelSalary==null){
+            ResultVOUtil.error(100,"操作出错请重新登录！");
+        }
+        personnelSalary.setConfirmStatus(1);
+        personnelSalaryService.save(personnelSalary);
+        return ResultVOUtil.success();
+   }
+   @PostMapping("/grants")
+   @ResponseBody
+   public ResultVO<Map<String,Object>> grants(@RequestParam Integer id){
+        PersonnelSalary personnelSalary = personnelSalaryService.findOne(id);
+        if (personnelSalary==null){
+            ResultVOUtil.error(100,"操作出错！");
+        }
+        personnelSalary.setGrantsStatus(1);
+        PersonnelSalary resultSalary = personnelSalaryService.save(personnelSalary);
+       //发送短信
+       Map<String,Object> map = new HashMap<>();
+       UserInfo messageUser = userService.findOne(personnelInfoService.findById(resultSalary.getPersonnelId()).getUserId());
+       String phone = messageUser.getPhone();
+       String username = messageUser.getName();
+       String type = resultSalary.getMonth()+"月";
+       String salary= String.valueOf(resultSalary.getRealSalary());
+       if(SendMessageUtil.sendSalaryMessage(phone, username, type, salary)){
+           map.put("message","短信发送成功！");
+       }else {
+           map.put("message","短信发送失败！");
+       }
+        return ResultVOUtil.success(map);
+   }
 
 
 

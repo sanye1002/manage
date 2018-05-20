@@ -27,4 +27,6 @@ public interface PersonnelSalaryService {
     Map<String,Object> importSalaryExcel(MultipartFile file, String path);
 
     PersonnelSalary findByPhoneAndMonth(String phone,String month);
+
+    Page<PersonnelSalary> findAllByPersonnelId(Pageable pageable,Integer id);
 }

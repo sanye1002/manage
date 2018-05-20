@@ -29,5 +29,5 @@ public interface CheckInfoRepository extends JpaRepository<CheckInfo,Integer> {
 
     List<CheckInfo> findAllByAcceptDeptNoAndApplyIdAndType(String acceptDeptNo,Integer applyId,String type);
 
-
+    Integer deleteAllByTypeAndApplyId(String type,Integer id);
 }
