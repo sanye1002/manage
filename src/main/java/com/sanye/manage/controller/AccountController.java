@@ -79,7 +79,7 @@ public class AccountController {
             return ResultVOUtil.error(100, "查无用户");
         } else {
 
-            session.setMaxInactiveInterval(300);
+            session.setMaxInactiveInterval(500);
             Integer code = RandomUtils.getRandom4Font();
             if (SendMessageUtil.sendCodeMessage(phone, code + "")) {
                 session.setAttribute("code", "" + code);

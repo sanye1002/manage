@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,5 +76,18 @@ public class WithdrawServiceImpl implements WithdrawService {
         }
         pageDTO.setPageContent(withdrawDTOList);
         return pageDTO;
+    }
+
+    @Override
+    public BigDecimal countAllByMonthAndResultStatus(String month) {
+        List<AnchorSalaryWithdraw> anchorSalaryWithdrawList = withdrawRepository.findAllByMonthAndResultStatus(month,1);
+        final BigDecimal[] bigDecimal = {new BigDecimal(0.00)};
+        if (anchorSalaryWithdrawList.isEmpty()){
+            return bigDecimal[0];
+        }
+        anchorSalaryWithdrawList.forEach( l ->{
+            bigDecimal[0] = bigDecimal[0].add(l.getSalary());
+        });
+        return bigDecimal[0];
     }
 }

@@ -29,5 +29,7 @@ public interface SpendingInfoRepository extends JpaRepository<SpendingInfo,Integ
 
     List<SpendingInfo> findAllByMonth(String month);
 
+    List<SpendingInfo> findAllByMonthAndResultStatusAndCheckStatus(String month,Integer r,Integer c);
+
 
 }

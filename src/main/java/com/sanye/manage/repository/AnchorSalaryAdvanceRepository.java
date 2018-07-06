@@ -22,4 +22,6 @@ public interface AnchorSalaryAdvanceRepository extends JpaRepository<AnchorSalar
     List<AnchorSalaryAdvance> findAllByMonthAndResultStatus(String month,Integer resultStatus);
 
     Page<AnchorSalaryAdvance> findAllByMonthAndCheckStatusAndResultStatus(Pageable pageable,String month,Integer checkStatus,Integer resultStatus);
+
+    List<AnchorSalaryAdvance> findAllByMonthAndResultStatusAndBackStatus(String month,Integer resultStatus,Integer backStatus);
 }

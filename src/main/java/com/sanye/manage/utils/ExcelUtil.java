@@ -1,5 +1,8 @@
 package com.sanye.manage.utils;
 
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+
 /**
  * @Author: 八哥
  * @computer：Administrator
@@ -52,5 +55,14 @@ public class ExcelUtil {
             }
         }
         return keyword;
+    }
+
+    public static HSSFCell getHSSFCell(HSSFRow row,String[] header){
+        HSSFCell cell = null;
+        for (int i=0;i<header.length;i++){
+            cell = row.createCell(i);
+            cell.setCellValue(header[i]);
+        }
+        return cell;
     }
 }

@@ -6,6 +6,7 @@ import com.sanye.manage.dataobject.AnchorSalaryAdvance;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -29,4 +30,6 @@ public interface AnchorSalaryAdvanceService {
     PageDTO<AnchorSalaryAdvanceDTO> findAllByMonthAndCheckStatusAndResultStatus(Pageable pageable, String month, Integer checkStatus, Integer resultStatus);
 
     Map<String,Object> revoke(Integer id);
+
+    Map<String,Object> countAllByMonthAndResultStatus(String month);
 }

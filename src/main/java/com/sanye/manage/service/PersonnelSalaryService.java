@@ -1,5 +1,7 @@
 package com.sanye.manage.service;
 
+import com.sanye.manage.DTO.PageDTO;
+import com.sanye.manage.DTO.PersonnelSalaryDTO;
 import com.sanye.manage.dataobject.PersonnelSalary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,4 +31,6 @@ public interface PersonnelSalaryService {
     PersonnelSalary findByPhoneAndMonth(String phone,String month);
 
     Page<PersonnelSalary> findAllByPersonnelId(Pageable pageable,Integer id);
+
+    PageDTO<PersonnelSalaryDTO> findAllDTOByMonth(Pageable pageable, String month);
 }

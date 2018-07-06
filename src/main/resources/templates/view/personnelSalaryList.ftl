@@ -93,12 +93,13 @@
                                         <th>实发金额</th>
                                         <th>备注</th>
                                         <th>确认状态</th>
+                                        <th>银行信息</th>
                                         <th>拨款状态</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <#list pageContent.getContent() as mm>
+                                        <#list pageContent.getPageContent() as mm>
                                         <tr id="${mm.getId()}">
                                             <td>${mm.getMonth()}</td>
                                             <td>${mm.getPersonnelName()}</td>
@@ -120,6 +121,9 @@
                                                 <#else >
                                                     <td>已确认</td>
                                             </#if>
+                                            <td>
+                                                <a class="btn btn-magenta btn-xs shiny" onclick="openPayMessage('${mm.getUserInfo().aliPay!}','${mm.getUserInfo().bankUserName!}','${mm.getUserInfo().bankType!}','${mm.getUserInfo().bankCardNumber!}')" ><i class="fa fa-shopping-cart"></i> 银行信息</a>
+                                            </td>
                                             <#if mm.getGrantsStatus() == 0>
                                                     <td>未拨款</td>
                                                     <td>
@@ -135,6 +139,7 @@
                                                         </a>
                                                     </td>
                                             </#if>
+
                                         </tr>
                                         </#list>
 
@@ -184,6 +189,17 @@
 <#include "../common/footjs.ftl">
 <script src="/layui/layui.js" charset="utf-8"></script>
 <script>
+    function openPayMessage(pay,username,type,number) {
+        layer.open({
+            title:'银行信息',
+            skin: 'ayui-layer-molv', //样式类名
+            closeBtn: 1, //不显示关闭按钮
+            anim: 2,
+            shadeClose: true, //开启遮罩关闭
+            content: '开户姓名：'+username+';  <br>开户银行：'+type+';  <br>银行账户：'+number+';  <br>支付宝：'+pay
+
+        });
+    }
     function grants(id) {
         layer.confirm('确定已给员工拨款？', {
             btn: ['确认', '取消'] //按钮

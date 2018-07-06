@@ -23,7 +23,7 @@ server:
     max-threads: 500
   connection-timeout: 5000
   port: 8888
-  #address: yhyc.cdrysj.com
+  address: oa.cdrysj.com
 
 
 upload:

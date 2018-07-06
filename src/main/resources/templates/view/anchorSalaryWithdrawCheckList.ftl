@@ -58,9 +58,9 @@
                             ${pageTitle}
                             </div>
 
-                           <#-- <div style="float:right;margin-right:2px;">
-                                <a id="printExcel" class="btn btn-magenta">打印Excel</a>
-                            </div>-->
+                           <div style="float:right;margin-right:2px;">
+                               <a id="printExcel" class="btn btn-magenta">当前总金额</a>
+                            </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
                                             <span class="input-icon icon-right">
@@ -157,11 +157,11 @@
                             <div class="margin-top-30 text-align-right">
                                 <div class="next">
                                     <ul class="pagination">
-                                        <li><a href="${url}?page=1&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">首页</a></li>
+                                        <li><a href="${url}?page=1&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">首页</a></li>
                                             <#if currentPage lte 1>
                                                 <li class="disabled"><a>上一页</a></li>
                                             <#else>
-                                                <li><a href="${url}?page=${currentPage-1}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">上一页</a></li>
+                                                <li><a href="${url}?page=${currentPage-1}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">上一页</a></li>
 
                                             </#if>
 
@@ -169,16 +169,16 @@
                                                    <#if currentPage == index >
                                                          <li class="active"><a href="#">${index}</a></li>
                                                    <#else>
-                                                        <li><a href="${url}?page=${index}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">${index}</a></li>
+                                                        <li><a href="${url}?page=${index}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">${index}</a></li>
                                                    </#if>
                                                </#list>
                                                 <#if currentPage gte pageContent.getTotalPages()>
                                                     <li class="disabled"><a>下一页</a></li>
                                                 <#else>
-                                                    <li><a href="${url}?page=${currentPage+1}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">下一页</a></li>
+                                                    <li><a href="${url}?page=${currentPage+1}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">下一页</a></li>
                                                 </#if>
                                         <li>
-                                            <a href="${url}?page=${pageContent.getTotalPages()}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">尾页</a>
+                                            <a href="${url}?page=${pageContent.getTotalPages()}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">尾页</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -271,17 +271,29 @@
             location = "/oa/withdraw/list.html?month=" + month + "&resultStatus=" + resultStatus + "&checkStatus=" + checkStatus
         })
         $("#printExcel").click(function () {
-            layer.confirm('是否下载Excel？', {
+            layer.confirm('是否计算${month!}提现金额？', {
                         btn: ['确认', '取消'] //按钮
                     }, function () {
 
                         layer.msg('请稍等...', {
                             time: 1000
                         });
-                        //执行POST请求
-                        setTimeout(function () {
-                            location = "/excel/export/${month}/1"
-                        }, 1000)
+                        //post请求
+                        $.post(
+                                "/oa/withdraw/count/salary",
+                                {month:'${month}'},
+                                function (res) {
+                                    var l = ""
+                                    layer.open({
+                                        title: '结果',
+                                        skin: 'ayui-layer-molv', //样式类名
+                                        closeBtn: 1, //不显示关闭按钮
+                                        anim: 2,
+                                        shadeClose: true, //开启遮罩关闭
+                                        content: '月份：${month}' + l+ ';  <br>提现：' + res.data
+                                    });
+                                }
+                        )
                     }
             )
 

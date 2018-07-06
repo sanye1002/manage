@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+
 /**
  * @Author: 八哥
  * @computer：Administrator
@@ -14,4 +16,11 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "upload")
 public class UploadConfig {
     private String path;
+
+    public String getResultPath(String url){
+        String ResultPath = this.path+ url.substring(9);
+        System.out.println(ResultPath);
+        return ResultPath;
+    }
+
 }

@@ -24,7 +24,5 @@ public class PayCheckUtil {
             return true;
         }
         return false;
-
-
     }
 }

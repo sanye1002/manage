@@ -82,7 +82,7 @@
                                     <td>${r.name}</td>
                                     <td>${r.description}</td>
                                     <td>${r.level}</td>
-                                    <td style="max-width: 800px">
+                                    <td>
                                        <#list r.getPermissionList() as per>
                                            ${per.name} &nbsp;
                                        </#list>

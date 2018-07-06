@@ -338,6 +338,9 @@
             var QQ = $("#QQ").val();
             var nickName = $("#userNickname").val();
             var phone = $("#userPhone").val();
+            if (phone != ""){
+                checkPhone()
+            }
             if (name == "") {
                 layer.msg("姓名不能为空", {
                     time: 1000
@@ -407,6 +410,33 @@
                 )
             }
         })
+
+        function checkPhone() {
+            if ($("#userPhone").val() != "") {
+                $.post(
+                        "/oa/user/phone",
+                        {
+                            phone: $("#userPhone").val()
+                        },
+                        function (res) {
+
+                            if (res.data.code != 0) {
+                                flog = true
+                                layer.msg(res.data.message, {
+                                    time: 1000
+                                });
+                            }
+                            if (res.data.code == 0) {
+                                check = true
+                                layer.msg(res.data.message, {
+                                    time: 1000
+                                });
+                            }
+
+                        }
+                )
+            }
+        }
     })
     $(function () {
         $("#passwordSubmit").click(function () {

@@ -198,6 +198,10 @@ public class AnchorSalaryWithdrawController {
         return ResultVOUtil.success(map);
     }
 
-
+    @PostMapping("/count/salary")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> countSalary(@RequestParam("month") String month){
+        return ResultVOUtil.success(withdrawService.countAllByMonthAndResultStatus(month));
+    }
 
 }

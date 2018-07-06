@@ -102,6 +102,9 @@ public class AnchorSalaryAdvanceController {
         if (bindingResult.hasErrors()) {
             return ResultVOUtil.error(100, bindingResult.getFieldError().getDefaultMessage());
         }
+        if (anchorSalaryAdvanceForm.getPlatformId()==null) {
+            return ResultVOUtil.error(100, "请联系运营负责人，原因：尚未将你添加成主播！！");
+        }
         AnchorSalaryAdvance anchorSalaryAdvance = new AnchorSalaryAdvance();
         BeanUtils.copyProperties(anchorSalaryAdvanceForm, anchorSalaryAdvance);
         Integer id = salaryAdvanceService.save(anchorSalaryAdvance).getId();
@@ -288,4 +291,9 @@ public class AnchorSalaryAdvanceController {
         return ResultVOUtil.success();
     }
 
+    @PostMapping("/count/salary")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> countSalary(@RequestParam("month") String month){
+        return ResultVOUtil.success(salaryAdvanceService.countAllByMonthAndResultStatus(month));
+    }
 }

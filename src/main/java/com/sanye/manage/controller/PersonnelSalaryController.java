@@ -1,5 +1,7 @@
 package com.sanye.manage.controller;
 
+import com.sanye.manage.DTO.PageDTO;
+import com.sanye.manage.DTO.PersonnelSalaryDTO;
 import com.sanye.manage.VO.ResultVO;
 import com.sanye.manage.config.UploadConfig;
 import com.sanye.manage.dataobject.FileInfo;
@@ -66,7 +68,7 @@ public class PersonnelSalaryController {
         if ("".equals(month)) {
             month = GetTimeUtil.getMonth();
         }
-        Page<PersonnelSalary> personnelSalaryPage = personnelSalaryService.findAllByMonth(pageRequest, month);
+        PageDTO<PersonnelSalaryDTO> personnelSalaryPage = personnelSalaryService.findAllDTOByMonth(pageRequest, month);
         map.put("pageId", 30);
         map.put("pageTitle", "工作人员工资列表");
         map.put("month", month);

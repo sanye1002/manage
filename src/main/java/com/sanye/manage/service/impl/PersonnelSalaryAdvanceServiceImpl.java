@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,6 +99,43 @@ public class PersonnelSalaryAdvanceServiceImpl implements PersonnelSalaryAdvance
             map.put("message","撤回【"+count+"】条记录");
         }
         personnelSalaryAdvanceRepository.delete(id);
+        return map;
+    }
+
+    @Override
+    public Map<String,Object> countAllByMonthAndResultStatus(String month) {
+        List<PersonnelSalaryAdvance> anchorSalaryAdvanceListAll = personnelSalaryAdvanceRepository.findAllByMonthAndResultStatus(month,1);
+        List<PersonnelSalaryAdvance> anchorSalaryAdvanceListNoBack = personnelSalaryAdvanceRepository.findAllByMonthAndResultStatusAndBackStatus(month,1,0);
+        List<PersonnelSalaryAdvance> anchorSalaryAdvanceListBack = personnelSalaryAdvanceRepository.findAllByMonthAndResultStatusAndBackStatus(month,1,1);
+        Map<String,Object> map = new HashMap<>();
+        final BigDecimal[] allSalary = {new BigDecimal(0.00)};
+        final BigDecimal[] backSalary = {new BigDecimal(0.00)};
+        final BigDecimal[] noBackSalary = {new BigDecimal(0.00)};
+        if (anchorSalaryAdvanceListAll.isEmpty()){
+            map.put("allSalary",allSalary[0]);
+            if (anchorSalaryAdvanceListNoBack.isEmpty()){
+                map.put("noBackSalary",noBackSalary[0]);
+            }
+            if (anchorSalaryAdvanceListBack.isEmpty()){
+                map.put("backSalary",backSalary[0]);
+
+            }
+            return map;
+        }
+        anchorSalaryAdvanceListAll.forEach( l ->{
+            allSalary[0] = allSalary[0].add(l.getSalary());
+        });
+        anchorSalaryAdvanceListNoBack.forEach(l->{
+
+            noBackSalary[0] = noBackSalary[0].add(l.getSalary());
+        });
+        anchorSalaryAdvanceListBack.forEach(l->{
+            backSalary[0] = backSalary[0].add(l.getSalary());
+        });
+
+        map.put("allSalary",allSalary[0]);
+        map.put("backSalary",backSalary[0]);
+        map.put("noBackSalary",noBackSalary[0]);
         return map;
     }
 }

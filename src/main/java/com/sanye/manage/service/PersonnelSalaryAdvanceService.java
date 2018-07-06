@@ -7,6 +7,7 @@ import com.sanye.manage.dataobject.PersonnelSalaryAdvance;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -72,4 +73,6 @@ public interface PersonnelSalaryAdvanceService {
     List<PersonnelSalaryAdvance> findAllByMonthAndResultStatus(String month,Integer resultStatus);
 
     Map<String,Object> revoke(Integer id);
+
+    Map<String,Object> countAllByMonthAndResultStatus(String month);
 }

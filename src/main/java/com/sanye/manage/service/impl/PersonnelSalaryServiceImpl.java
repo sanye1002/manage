@@ -1,9 +1,13 @@
 package com.sanye.manage.service.impl;
 
+import com.sanye.manage.DTO.PageDTO;
+import com.sanye.manage.DTO.PersonnelSalaryDTO;
 import com.sanye.manage.dataobject.PersonnelInfo;
 import com.sanye.manage.dataobject.PersonnelSalary;
+import com.sanye.manage.dataobject.UserInfo;
 import com.sanye.manage.repository.PersonnelInfoRepository;
 import com.sanye.manage.repository.PersonnelSalaryRepository;
+import com.sanye.manage.repository.UserInfoRepository;
 import com.sanye.manage.service.PersonnelSalaryService;
 import com.sanye.manage.utils.ExcelUtil;
 import com.sanye.manage.utils.KeyUtil;
@@ -14,6 +18,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +50,8 @@ public class PersonnelSalaryServiceImpl implements PersonnelSalaryService {
 
     @Autowired
     private PersonnelInfoRepository personnelInfoRepository;
+    @Autowired
+    private UserInfoRepository userInfoRepository;
     @Override
     public PersonnelSalary save(PersonnelSalary personnelSalary) {
         return salaryRepository.save(personnelSalary);
@@ -164,5 +171,23 @@ public class PersonnelSalaryServiceImpl implements PersonnelSalaryService {
     @Override
     public Page<PersonnelSalary> findAllByPersonnelId(Pageable pageable, Integer id) {
         return salaryRepository.findAllByPersonnelId(pageable, personnelInfoRepository.findByUserId(id).getId());
+    }
+
+    @Override
+    public PageDTO<PersonnelSalaryDTO> findAllDTOByMonth(Pageable pageable, String month) {
+        Page<PersonnelSalary> salaryPage = salaryRepository.findAllByMonth(pageable, month);
+        PageDTO<PersonnelSalaryDTO> pageDTO = new PageDTO();
+        List<PersonnelSalaryDTO> list= new ArrayList<>();
+        pageDTO.setTotalPages(salaryPage.getTotalPages());
+        if(!salaryPage.getContent().isEmpty()){
+            salaryPage.getContent().forEach( l->{
+                PersonnelSalaryDTO personnelSalaryDTO = new PersonnelSalaryDTO();
+                BeanUtils.copyProperties(l,personnelSalaryDTO);
+                personnelSalaryDTO.setUserInfo(userInfoRepository.findOne(personnelInfoRepository.findOne(l.getPersonnelId()).getUserId()));
+                list.add(personnelSalaryDTO);
+            });
+        }
+        pageDTO.setPageContent(list);
+        return pageDTO;
     }
 }

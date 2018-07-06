@@ -120,6 +120,31 @@
             </ul>
         </li>
              </@shiro.hasPermission>
+    <!--超级管理员-->
+             <@shiro.hasPermission name="superManager:tag">
+
+        <li  <#if pageId==60>class="open" </#if>>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon fa fa-gavel"></i>
+                <span class="menu-text"> 超级管理 </span>
+
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li <#if pageId==60>class="active" </#if>>
+                    <a href="/oa/case/master/list/manager.html">
+                        <span class="menu-text">所有事件</span>
+                    </a>
+                </li>
+
+                <#--<li <#if pageId==10>class="active" </#if>>
+                    <a href="/oa/itemDebit/index.html">
+                        <span class="menu-text">借记添加</span>
+                    </a>
+                </li>-->
+            </ul>
+        </li>
+             </@shiro.hasPermission>
 
         <!--M人员管理-->
              <@shiro.hasPermission name="staff:tag">
@@ -232,6 +257,30 @@
                 <li <#if pageId==18>class="active" </#if>>
                     <a href="/oa/dept/list.html">
                         <span class="menu-text">查询部门</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+             </@shiro.hasPermission>
+    <!--事件管理-->
+             <@shiro.hasPermission name="caseMange:tag">
+        <li <#if pageId==51|| pageId==52>class="active open" </#if>>
+            <a href="#" class="menu-dropdown">
+                <i class="menu-icon glyphicon glyphicon-signal"></i>
+                <span class="menu-text"> 事件管理 </span>
+
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li <#if pageId==52>class="active" </#if>>
+                    <a href="/oa/case/application/index.html">
+                        <span class="menu-text">添加事件</span>
+                    </a>
+                </li>
+                <li <#if pageId==51>class="active" </#if>>
+                    <a href="/oa/case/master/list/user.html">
+                        <span class="menu-text">查询事件</span>
                     </a>
                 </li>
 
@@ -380,7 +429,7 @@
         <!--Right to Left-->
              <@shiro.hasPermission name="check:tag">
 
-          <li <#if pageId==6||pageId==40>class="open" </#if>>
+          <li <#if pageId==25||pageId==40||pageId==50>class="open" </#if>>
               <a href="#" class="menu-dropdown">
                   <i class="menu-icon fa fa-align-right"></i>
                   <span class="menu-text">审核管理</span>
@@ -388,7 +437,7 @@
                   <i class="menu-expand"></i>
               </a>
               <ul class="submenu">
-                  <li <#if pageId==6>class="active" </#if>>
+                  <li <#if pageId==25>class="active" </#if>>
                       <a href="/oa/check/list.html">
                           <span class="menu-text">审核记录</span>
                       </a>
@@ -396,6 +445,11 @@
                   <li <#if pageId==40>class="active" </#if>>
                       <a href="/oa/feedback/info/check.html">
                           <span class="menu-text">反馈记录</span>
+                      </a>
+                  </li>
+                  <li <#if pageId==50>class="active" </#if>>
+                      <a href="/oa/case/master/list/check.html">
+                          <span class="menu-text">审核事件</span>
                       </a>
                   </li>
               </ul>

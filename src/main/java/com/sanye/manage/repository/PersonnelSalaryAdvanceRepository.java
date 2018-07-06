@@ -23,7 +23,7 @@ public interface PersonnelSalaryAdvanceRepository extends JpaRepository<Personne
 
     Page<PersonnelSalaryAdvance> findAllByMonthAndCheckStatusAndResultStatus(Pageable pageable,String month,Integer checkStatus,Integer resultStatus);
 
-
+    List<PersonnelSalaryAdvance> findAllByMonthAndResultStatusAndBackStatus(String month,Integer resultStatus,Integer backStatus);
 
 
 }

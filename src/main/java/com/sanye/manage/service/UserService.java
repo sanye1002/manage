@@ -1,6 +1,7 @@
 package com.sanye.manage.service;
 
 import com.sanye.manage.DTO.UserDTO;
+import com.sanye.manage.VO.ResultVO;
 import com.sanye.manage.dataobject.UserInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,4 +34,6 @@ public interface UserService {
     Page<UserInfo> findAllByUserTypeAndStatusAndShowStatus(Pageable pageable,String userType, Integer status);
 
     List<UserInfo> findAllForNoticeByUserType(String userType);
+
+    ResultVO<Map<String,Object>> loginAPI(String phone, String password);
 }

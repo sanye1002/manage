@@ -16,9 +16,9 @@ public interface PersonnelInfoRepository extends JpaRepository<PersonnelInfo,Int
 
     Page<PersonnelInfo> findAllByShowStatus(Pageable pageable,Integer showStatus);
 
-    Page<PersonnelInfo> findAllByShowStatusAndStatus(Pageable pageable,Integer status,Integer showStatus);
+    Page<PersonnelInfo> findAllByShowStatusAndStatus(Pageable pageable,Integer showStatus,Integer status);
 
-    Page<PersonnelInfo> findAllByShowStatusAndStatusAndDeptNo(Pageable pageable,Integer status,Integer showStatus,String deptNo);
+    Page<PersonnelInfo> findAllByShowStatusAndStatusAndDeptNo(Pageable pageable,Integer showStatus,Integer status,String deptNo);
 
     List<PersonnelInfo> findAllByShowStatus(Integer showStatus);
 

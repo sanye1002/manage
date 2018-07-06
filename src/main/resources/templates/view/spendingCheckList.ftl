@@ -59,7 +59,10 @@
                             </div>
 
                             <div style="float:right;margin-right:2px;">
-                                <a id="printExcel" class="btn btn-magenta">打印Excel</a>
+                                <a id="printExcel" class="btn btn-magenta">计算总开支</a>
+                            </div>
+                            <div style="float:right;margin-right:2px;">
+                                <a href="/oa/spending/download/${month}"  class="btn btn-maroon">打印EXCEL</a>
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
@@ -119,7 +122,7 @@
                                     <td>${p.getSpendingInfo().getPersonnelName()}</td>
                                     <td>${p.getSpendingInfo().getCreateTime()}</td>
                                     <td>${p.getSpendingInfo().getTitle()}</td>
-                                    <td style="max-width: 400px">${p.getSpendingInfo().getDescription()}</td>
+                                    <td>${p.getSpendingInfo().getDescription()!}</td>
                                     <td>${p.getSpendingInfo().getSalary()}</td>
 
                                     <td>
@@ -136,19 +139,26 @@
 
                                     <td>
                                         <#if p.getSpendingInfo().getCheckStatus()==0>
-                                             <a class="btn btn-info btn-xs" onclick="grants(${p.getSpendingInfo().getId()},1)"><i class="fa fa-edit"></i> 拨款
+                                             <a class="btn btn-info btn-xs"
+                                                onclick="grants(${p.getSpendingInfo().getId()},1)"><i
+                                                     class="fa fa-edit"></i> 拨款
                                              </a>
-                                            <a class="btn btn-danger btn-xs edit" onclick="grants(${p.getSpendingInfo().getId()},0)"><i class="fa fa-frown-o"></i>
+                                            <a class="btn btn-danger btn-xs edit"
+                                               onclick="grants(${p.getSpendingInfo().getId()},0)"><i
+                                                    class="fa fa-frown-o"></i>
                                                 撤回</a>
                                         <#else >
                                             <a class="btn btn-default btn-xs"><i class="fa fa-edit"></i> 已处理 </a>
+                                            <a class="btn btn-success btn-xs" href="/oa/spending/downloadImg/${p.getSpendingInfo().getId()}"><i class="fa fa-edit"></i> 下载图片 </a>
                                         </#if>
 
                                         <a class="btn btn-yellow btn-xs shiny"
                                            onclick="showImg(${p.getSpendingInfo().id})"><i
                                                 class="fa fa-check"></i> 图片</a>
 
-                                        <a class="btn btn-magenta btn-xs shiny" onclick="openPayMessage('${p.getUserInfo().aliPay!}','${p.getUserInfo().bankUserName!}','${p.getUserInfo().bankType!}','${p.getUserInfo().bankCardNumber!}')" ><i class="fa fa-shopping-cart"></i> 银行信息</a>
+                                        <a class="btn btn-magenta btn-xs shiny"
+                                           onclick="openPayMessage('${p.getUserInfo().aliPay!}','${p.getUserInfo().bankUserName!}','${p.getUserInfo().bankType!}','${p.getUserInfo().bankCardNumber!}')"><i
+                                                class="fa fa-shopping-cart"></i> 银行信息</a>
 
                                         <a class="btn btn-danger btn-xs"><i class="fa fa-times"></i>
                                             删除</a>
@@ -163,11 +173,15 @@
                             <div class="margin-top-30 text-align-right">
                                 <div class="next">
                                     <ul class="pagination">
-                                        <li><a href="${url}?page=1&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">首页</a></li>
+                                        <li>
+                                            <a href="${url}?page=1&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">首页</a>
+                                        </li>
                                             <#if currentPage lte 1>
                                                 <li class="disabled"><a>上一页</a></li>
                                             <#else>
-                                                <li><a href="${url}?page=${currentPage-1}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">上一页</a></li>
+                                                <li>
+                                                    <a href="${url}?page=${currentPage-1}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">上一页</a>
+                                                </li>
 
                                             </#if>
 
@@ -175,16 +189,20 @@
                                                    <#if currentPage == index >
                                                          <li class="active"><a href="#">${index}</a></li>
                                                    <#else>
-                                                        <li><a href="${url}?page=${index}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">${index}</a></li>
+                                                        <li>
+                                                            <a href="${url}?page=${index}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">${index}</a>
+                                                        </li>
                                                    </#if>
                                                </#list>
                                                 <#if currentPage gte pageContent.getTotalPages()>
                                                     <li class="disabled"><a>下一页</a></li>
                                                 <#else>
-                                                    <li><a href="${url}?page=${currentPage+1}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">下一页</a></li>
+                                                    <li>
+                                                        <a href="${url}?page=${currentPage+1}&size=${size}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">下一页</a>
+                                                    </li>
                                                 </#if>
                                         <li>
-                                            <a href="${url}?page=${pageContent.getTotalPages()}&resultStatus=${resultStatus}&checkStatus=${checkStatus}">尾页</a>
+                                            <a href="${url}?page=${pageContent.getTotalPages()}&resultStatus=${resultStatus}&checkStatus=${checkStatus}&month=${month}">尾页</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -229,21 +247,21 @@
                             resultStatus: resultStatus
                         },
                         function (res) {
-                            if (res.code==0){
-                                layer.msg(res.message+"----"+res.data.message, {
+                            if (res.code == 0) {
+                                layer.msg(res.message + "----" + res.data.message, {
                                     time: 1000
                                 });
-                            }else {
+                            } else {
                                 layer.msg(res.message, {
                                     time: 1000
                                 });
                             }
-                            var url =  window.location.pathname;
+                            var url = window.location.pathname;
                             var search = window.location.search;
-                            if (res.code==0){
+                            if (res.code == 0) {
                                 setTimeout(function () {
-                                    location=url+search
-                                },1000)
+                                    location = url + search
+                                }, 1000)
 
                             }
                         }
@@ -271,23 +289,35 @@
             var month = $("#month").val();
             var checkStatus = $("#selectType").val();
             var resultStatus = $("input[type=checkbox]:checked").val();
-            if (resultStatus==1){
-                resultStatus =0
+            if (resultStatus == 1) {
+                resultStatus = 0
             }
             location = "/oa/spending/checkList?month=" + month + "&resultStatus=" + resultStatus + "&checkStatus=" + checkStatus
         })
         $("#printExcel").click(function () {
-            layer.confirm('是否下载Excel？', {
+            layer.confirm('是否计算${month!}开支金额？', {
                         btn: ['确认', '取消'] //按钮
                     }, function () {
 
                         layer.msg('请稍等...', {
                             time: 1000
                         });
-                        //执行POST请求
-                        setTimeout(function () {
-                            location = "/excel/export/${month}/1"
-                        }, 1000)
+                        //post请求
+                        $.post(
+                                "/oa/spending/count/salary",
+                                {month:'${month}'},
+                                function (res) {
+                                    var l = ""
+                                    layer.open({
+                                        title: '结果',
+                                        skin: 'ayui-layer-molv', //样式类名
+                                        closeBtn: 1, //不显示关闭按钮
+                                        anim: 2,
+                                        shadeClose: true, //开启遮罩关闭
+                                        content: '月份：${month}' + l+ ';  <br>总开支：' + res.data
+                                    });
+                                }
+                        )
                     }
             )
 
@@ -296,17 +326,18 @@
 
 </script>
 <script>
-    function openPayMessage(pay,username,type,number) {
+    function openPayMessage(pay, username, type, number) {
         layer.open({
-            title:'银行信息',
+            title: '银行信息',
             skin: 'ayui-layer-molv', //样式类名
             closeBtn: 1, //不显示关闭按钮
             anim: 2,
             shadeClose: true, //开启遮罩关闭
-            content: '开户姓名：'+username+';  <br>开户银行：'+type+';  <br>银行账户：'+number+';  <br>支付宝：'+pay
+            content: '开户姓名：' + username + ';  <br>开户银行：' + type + ';  <br>银行账户：' + number + ';  <br>支付宝：' + pay
 
         });
     }
+
     function showImg(id) {
         $.getJSON('/layer/spending/' + id, function (json) {
             layer.photos({

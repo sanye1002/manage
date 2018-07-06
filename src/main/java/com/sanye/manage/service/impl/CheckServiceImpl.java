@@ -49,13 +49,37 @@ public class CheckServiceImpl implements CheckService {
     @Autowired
     private UserInfoRepository userInfoRepository;
 
+    public void checkSave001(CheckInfo Info){
+
+        List<PersonnelInfo> personnelInfoList001 = personnelInfoRepository.findByDeptNo("001");
+        DeptInfo deptInfo001 = deptInfoRepository.findByDeptNo("001");
+
+        for (int i = 0; i < personnelInfoList001.size(); i++) {
+            if (Info.getApplyPersonnelId() == personnelInfoList001.get(i).getId() && personnelInfoList001.size() > 1) {
+                continue;
+            }
+            CheckInfo checkInfo = new CheckInfo();
+            checkInfo.setApplyId(Info.getApplyId());
+            checkInfo.setAcceptDeptNo("001");
+            checkInfo.setApplyTime(Info.getApplyTime());
+            checkInfo.setApplyPersonnelId(Info.getApplyPersonnelId());
+            checkInfo.setApplyPersonnelName(Info.getApplyPersonnelName());
+            checkInfo.setAcceptPersonnelId(personnelInfoList001.get(i).getId());
+            checkInfo.setOrderId(2);
+            checkInfo.setAcceptPersonnelName(personnelInfoList001.get(i).getName());
+            checkInfo.setType(Info.getType());
+            checkInfo.setSalary(Info.getSalary());
+            checkInfo.setTitle(Info.getTitle());
+            checkInfo.setDescription(Info.getDescription());
+            checkInfoRepository.save(checkInfo);
+        }
+    }
     @Override
     public void personnelCheckSave(CheckForm checkForm) {
 
         PersonnelInfo applyPerson = personnelInfoRepository.findByUserId(checkForm.getApplyPersonnelId());
         List<PersonnelInfo> personnelInfoList001 = personnelInfoRepository.findByDeptNo("001");
-        DeptInfo deptInfo001 = deptInfoRepository.findByDeptNo("001");
-        //日常开支
+        /*//日常开支
         if (applyPerson.getDeptNo().equals("001")) {
             // 保存001部门的人员
             for (int i = 0; i < personnelInfoList001.size(); i++) {
@@ -78,7 +102,7 @@ public class CheckServiceImpl implements CheckService {
                 checkInfoRepository.save(checkInfo);
             }
 
-        } else {
+        } else {*/
             // 查询该人员是否问部门领导
             DeptInfo applyDept = deptInfoRepository.findByDeptNo(applyPerson.getDeptNo());
 
@@ -122,7 +146,8 @@ public class CheckServiceImpl implements CheckService {
                     checkInfo.setApplyPersonnelName(applyPerson.getName());
                     checkInfoRepository.save(checkInfo);
                 }
-                for (int i = 0; i < personnelInfoList001.size(); i++) {
+                //保存001
+                /*for (int i = 0; i < personnelInfoList001.size(); i++) {
                     CheckInfo checkInfo = new CheckInfo();
                     checkInfo.setApplyId(checkForm.getApplyId());
                     checkInfo.setAcceptDeptNo(personnelInfoList001.get(i).getDeptNo());
@@ -137,9 +162,10 @@ public class CheckServiceImpl implements CheckService {
                     checkInfo.setApplyPersonnelName(applyPerson.getName());
                     checkInfo.setApplyTime(checkForm.getApplyTime());
                     checkInfoRepository.save(checkInfo);
-                }
+                }*/
+
             }
-        }
+        //}
 
 
         // 工资申请
@@ -150,7 +176,6 @@ public class CheckServiceImpl implements CheckService {
     @Override
     public void anchorCheckSave(CheckForm checkForm) {
         UserInfo applyPerson = userInfoRepository.findOne(checkForm.getApplyPersonnelId());
-        List<PersonnelInfo> personnelInfoList001 = personnelInfoRepository.findByDeptNo("001");
         PlatformInfo platformInfo = platformInfoRepository.findOne(checkForm.getPlatformId());
         PersonnelInfo platformBoss = personnelInfoRepository.findOne(platformInfo.getUserId());
         //1 平台领导
@@ -174,7 +199,7 @@ public class CheckServiceImpl implements CheckService {
             checkInfo1.setDescription(checkForm.getDescription());
             checkInfoRepository.save(checkInfo1);
         }
-        for (int i = 0; i < personnelInfoList001.size(); i++) {
+        /*for (int i = 0; i < personnelInfoList001.size(); i++) {
             if (personnelInfoList001.get(i).getUserId()==platformInfo.getUserId()){
                 continue;
             }
@@ -192,7 +217,7 @@ public class CheckServiceImpl implements CheckService {
             checkInfo.setTitle(checkForm.getTitle());
             checkInfo.setDescription(checkForm.getDescription());
             checkInfoRepository.save(checkInfo);
-        }
+        }*/
     }
 
     @Override
@@ -219,6 +244,9 @@ public class CheckServiceImpl implements CheckService {
             checkInfo.setCheckPersonnelId(checkForm.getCheckPersonnelId());
             checkInfo.setCheckPersonnelName(checkForm.getCheckPersonnelName());
             checkInfoRepository.save(checkInfo);
+            if (checkForm.getResultStatus()==1){
+                this.checkSave001(checkInfo);
+            }
         }
     }
 

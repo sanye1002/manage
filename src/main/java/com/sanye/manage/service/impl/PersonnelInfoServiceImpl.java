@@ -92,7 +92,7 @@ public class PersonnelInfoServiceImpl implements PersonnelInfoService {
 
         List<PersonnelInfoDTO> infoDTOList = new ArrayList<>();
         if (deptNo.equals("001")) {
-            Page<PersonnelInfo> personnelInfoPage = personnelInfoRepository.findAllByShowStatusAndStatus(pageable, status, 1);
+            Page<PersonnelInfo> personnelInfoPage = personnelInfoRepository.findAllByShowStatusAndStatus(pageable,  1,status);
             if (!personnelInfoPage.getContent().isEmpty()){
                 infoDTOList = personnelInfoPage.getContent().stream().map(
                         e -> findOne(e.getId())
@@ -101,7 +101,7 @@ public class PersonnelInfoServiceImpl implements PersonnelInfoService {
             PageDTO<PersonnelInfoDTO> pageDTO = new PageDTO<>(personnelInfoPage.getTotalPages(),infoDTOList);
             return pageDTO;
         }else {
-            Page<PersonnelInfo> personnelInfoPage = personnelInfoRepository.findAllByShowStatusAndStatusAndDeptNo(pageable, status, 1, deptNo);
+            Page<PersonnelInfo> personnelInfoPage = personnelInfoRepository.findAllByShowStatusAndStatusAndDeptNo(pageable, 1,status, deptNo);
             if (!personnelInfoPage.getContent().isEmpty()) {
 
                 infoDTOList = personnelInfoPage

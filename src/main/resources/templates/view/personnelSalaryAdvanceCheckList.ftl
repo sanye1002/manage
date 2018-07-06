@@ -58,9 +58,9 @@
                             ${pageTitle}
                             </div>
 
-                           <#-- <div style="float:right;margin-right:2px;">
-                                <a id="printExcel" class="btn btn-magenta">打印Excel</a>
-                            </div>-->
+                           <div style="float:right;margin-right:2px;">
+                                <a id="printExcel" class="btn btn-magenta">当前总金额</a>
+                            </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
                                             <span class="input-icon icon-right">
@@ -124,7 +124,7 @@
                                     <td>${p.getPersonnelSalaryAdvance().getPersonnelName()}</td>
                                     <td>${p.getPersonnelSalaryAdvance().getCreateTime()}</td>
                                     <td>${p.getPersonnelSalaryAdvance().getTitle()}</td>
-                                    <td style="max-width: 400px">${p.getPersonnelSalaryAdvance().getDescription()}</td>
+                                    <td>${p.getPersonnelSalaryAdvance().getDescription()}</td>
                                     <td>${p.getPersonnelSalaryAdvance().getSalary()}</td>
                                     <td>
                                             <#if p.getPersonnelSalaryAdvance().getBackStatus()==0>
@@ -324,17 +324,29 @@
             location = "/oa/personnelSalaryAdvance/checkList?month=" + month + "&resultStatus=" + resultStatus + "&checkStatus=" + checkStatus
         })
         $("#printExcel").click(function () {
-            layer.confirm('是否下载Excel？', {
+            layer.confirm('是否计算${month!}预支金额？', {
                         btn: ['确认', '取消'] //按钮
                     }, function () {
 
                         layer.msg('请稍等...', {
                             time: 1000
                         });
-                        //执行POST请求
-                        setTimeout(function () {
-                            location = "/excel/export/${month}/1"
-                        }, 1000)
+                        //post请求
+                        $.post(
+                                "/oa/personnelSalaryAdvance/count/salary",
+                                {month:'${month}'},
+                                function (res) {
+                                    var l = ""
+                                    layer.open({
+                                        title: '结果',
+                                        skin: 'ayui-layer-molv', //样式类名
+                                        closeBtn: 1, //不显示关闭按钮
+                                        anim: 2,
+                                        shadeClose: true, //开启遮罩关闭
+                                        content: '月份：${month}' + l+ ';  <br>总预支：'+res.data.allSalary+';  <br>已归还：'+res.data.backSalary+';  <br>未归还：'+res.data.noBackSalary
+                                    });
+                                }
+                        )
                     }
             )
 
@@ -362,6 +374,7 @@
             });
         });
     }
+
 </script>
 </body>
 </html>

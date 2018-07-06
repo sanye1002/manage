@@ -6,6 +6,7 @@ import com.sanye.manage.dataobject.AnchorSalaryWithdraw;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,4 +28,6 @@ public interface WithdrawService {
     List<AnchorSalaryWithdraw> findAllByMonthAndResultStatus(String month, Integer resultStatus);
 
     PageDTO<AnchorSalaryWithdrawDTO> findAllByMonthAndCheckStatusAndResultStatus(Pageable pageable, String month, Integer checkStatus, Integer resultStatus);
+
+    BigDecimal countAllByMonthAndResultStatus(String month);
 }

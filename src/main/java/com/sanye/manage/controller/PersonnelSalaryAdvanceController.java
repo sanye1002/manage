@@ -291,5 +291,9 @@ public class PersonnelSalaryAdvanceController {
         salaryAdvanceService.save(personnelSalaryAdvance);
         return ResultVOUtil.success();
     }
-
+    @PostMapping("/count/salary")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> countSalary(@RequestParam("month") String month){
+        return ResultVOUtil.success(salaryAdvanceService.countAllByMonthAndResultStatus(month));
+    }
 }

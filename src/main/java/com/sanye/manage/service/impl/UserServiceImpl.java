@@ -1,5 +1,6 @@
 package com.sanye.manage.service.impl;
 
+import com.sanye.manage.VO.ResultVO;
 import com.sanye.manage.dataobject.AnchorInfo;
 import com.sanye.manage.dataobject.UserInfo;
 import com.sanye.manage.repository.AnchorInfoRepository;
@@ -9,6 +10,7 @@ import com.sanye.manage.service.AnchorService;
 import com.sanye.manage.service.PersonnelInfoService;
 import com.sanye.manage.service.UserService;
 import com.sanye.manage.utils.Encrypt;
+import com.sanye.manage.utils.ResultVOUtil;
 import com.sanye.manage.utils.ShiroGetSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -161,5 +163,25 @@ public class UserServiceImpl implements UserService {
             }
         }
         return userInfoRepository.findAllByStatusAndShowStatusAndUserType(1, 1,userType);
+    }
+
+    @Override
+    public ResultVO<Map<String,Object>> loginAPI(String phone, String password) {
+        UserInfo userInfo = userInfoRepository.findByPhone(phone);
+        Map<String,Object> map = new HashMap<>();
+        if (userInfo==null){
+            return ResultVOUtil.error(304,"用户不存在~");
+        }
+        if (userInfo.getPassword().equals(Encrypt.md5(password))){
+           if (userInfo.getShowStatus()==1&&userInfo.getStatus()==1){
+               map.put("User",userInfo);
+               return ResultVOUtil.success(map);
+           }else {
+               return ResultVOUtil.error(304,"账号已注销~");
+           }
+        }else {
+            return ResultVOUtil.error(304,"密码输入错误~");
+        }
+
     }
 }

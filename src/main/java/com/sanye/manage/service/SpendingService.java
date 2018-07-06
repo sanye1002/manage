@@ -3,9 +3,11 @@ package com.sanye.manage.service;
 import com.sanye.manage.DTO.PageDTO;
 import com.sanye.manage.DTO.SpendingDTO;
 import com.sanye.manage.dataobject.SpendingInfo;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -105,6 +107,22 @@ public interface SpendingService {
 
     Map<String,Object> revoke(Integer id);
 
+    Integer findAllByMonthAndResultStatusAndCheckStatus(String month,Integer r,Integer c);
+
+    /**
+     * 计算当月开支总金额
+     * @param month
+     * @return
+     */
+    BigDecimal countAllByMonthAndResultStatus(String month);
+
+    /**
+     * 打印表
+     * @param month
+     * @param status
+     * @return
+     */
+    HSSFWorkbook downloadToExcelByMonthAndResultStatus(String month,Integer status);
 
 }
 

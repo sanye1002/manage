@@ -75,13 +75,13 @@
                                          <div class="item-sender">
                                              <a href="/oa/check/index/${check.getId()}.html" class="col-name">${check.getApplyPersonnelName()!}</a>
                                          </div>
-                                         <div class="item-subject">
+                                         <div class="item-subject" style="width: 900px;display: inline-block;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                              <span class="label
                                                  <#if check.getResultStatus()==1>label-palegreen
                                                    <#elseif check.getCheckStatus() ==0>label-yellow
                                                    <#elseif check.getResultStatus() == 0>label-darkorange
                                                  </#if>">${check.getType()}</span>
-                                             <a href="/oa/check/index/${check.getId()}.html">
+                                             <a href="/oa/check/index/${check.getId()}.html" >
                                                  ${check.getDescription()}
                                              </a>
                                          </div>

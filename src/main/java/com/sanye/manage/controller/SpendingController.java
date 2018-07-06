@@ -3,6 +3,7 @@ package com.sanye.manage.controller;
 import com.sanye.manage.DTO.PageDTO;
 import com.sanye.manage.DTO.SpendingDTO;
 import com.sanye.manage.VO.ResultVO;
+import com.sanye.manage.config.UploadConfig;
 import com.sanye.manage.dataobject.CheckInfo;
 import com.sanye.manage.dataobject.PersonnelInfo;
 import com.sanye.manage.dataobject.SpendingInfo;
@@ -11,7 +12,7 @@ import com.sanye.manage.form.CheckForm;
 import com.sanye.manage.form.SpendingForm;
 import com.sanye.manage.service.*;
 import com.sanye.manage.utils.*;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
@@ -25,9 +26,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * @Author: popo
@@ -53,6 +61,10 @@ public class SpendingController {
 
     @Autowired
     private CheckService checkService;
+    @Autowired
+    private WaterMarkUtils waterMarkUtils;
+    @Autowired
+    private UploadConfig uploadConfig;
 
     @GetMapping("/index")
     @RequiresPermissions("spending:add")
@@ -181,8 +193,8 @@ public class SpendingController {
             month = GetTimeUtil.getMonth();
         }
         PageRequest pageRequest = new PageRequest(page - 1, size, SortTools.basicSort());
-        Integer pass = spendingService.findAllByMonthAndResultStatus(month, 1).size();
-        Integer noPass = spendingService.findAllByMonthAndResultStatus(month, 0).size();
+        Integer pass = spendingService.findAllByMonthAndResultStatusAndCheckStatus(month, 1,1);
+        Integer noPass = spendingService.findAllByMonthAndResultStatusAndCheckStatus(month, 0,0);
         PageDTO<SpendingDTO> spendingDTOPageDTO = spendingService.findAllByMonthAndAllStatus(pageRequest, month, checkStatus, resultStatus);
         map.put("pageId", 26);
         map.put("pageTitle", "日常开支列表");
@@ -246,7 +258,81 @@ public class SpendingController {
     @GetMapping("/download/{month}")
     public void download(HttpServletResponse response,
                          @PathVariable(value = "month") String month) {
-        List<SpendingInfo> spendingInfoList = spendingService.findAllByMonth(month);
+        HSSFWorkbook hssfWorkbook = spendingService.downloadToExcelByMonthAndResultStatus(month,1);
+        if (hssfWorkbook!=null){
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-disposition", "attachment;filename=spendingInfo.xls");
+
+            try {
+                response.flushBuffer();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                hssfWorkbook.write(response.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+            try {
+                response.setContentType("text/html; charset=UTF-8");
+                response.getWriter().print(month+"月，数据为空！");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @GetMapping("/downloadImg/{id}")
+    public void download(HttpServletResponse response,
+                         @PathVariable(value = "id") Integer id) {
+       SpendingInfo spendingInfo = spendingService.findOne(id);
+        if (spendingInfo!=null){
+            List<String> list = SplitUtil.splitComme(spendingInfo.getImg());
+            if (list.isEmpty()){
+                try {
+                    response.setContentType("text/html; charset=UTF-8");
+                    response.getWriter().print("数据为空！");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                String downloadFilename = "图片.zip";//文件的名称
+                downloadFilename = URLEncoder.encode(downloadFilename, "UTF-8");//转换中文否则可能会产生乱码
+                response.setContentType("application/octet-stream");// 指明response的返回对象是文件流
+                response.setHeader("Content-Disposition", "attachment;filename=" + downloadFilename);// 设置在下载框默认显示的文件名
+                ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+               // String[] files = new String[]{"http://xxxx/xx.jpg","http://xxx/xx.jpg"};
+                for (int i=0;i<list.size();i++) {
+                    //URL url = new URL(files[i]);
+                    zos.putNextEntry(new ZipEntry(i+".jpg"));
+                    FileInputStream fis = new FileInputStream(new File(waterMarkUtils.getWaterMarkByText(uploadConfig.getResultPath(list.get(i)),spendingInfo.getDescription())));
+                    //InputStream fis = url.openConnection().getInputStream();
+                    byte[] buffer = new byte[1024];
+                    int r = 0;
+                    while ((r = fis.read(buffer)) != -1) {
+                        zos.write(buffer, 0, r);
+                    }
+                    fis.close();
+                }
+                zos.flush();
+                zos.close();
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }else {
+            try {
+                response.setContentType("text/html; charset=UTF-8");
+                response.getWriter().print("数据为空！");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     @PostMapping("/revoke")
     @ResponseBody
@@ -262,6 +348,13 @@ public class SpendingController {
         spendingService.save(spendingInfo);
         return ResultVOUtil.success();
     }
+    @PostMapping("/count/salary")
+    @ResponseBody
+    public ResultVO<Map<String, Object>> countSalary(@RequestParam("month") String month){
+        return ResultVOUtil.success(spendingService.countAllByMonthAndResultStatus(month));
+    }
+
+
 
 
 
